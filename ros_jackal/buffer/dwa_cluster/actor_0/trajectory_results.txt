@@ -1,3 +1,4 @@
 Train: Collision: 0, Recovery: 0.439667, Smoothness: -42.391553, Status: True, Time: 36.032 , Reward: 28.903, Opt_time: 6.716 , Nav_Metric: 0.186 , World: world_0.world
 Train: Collision: 0, Recovery: 0.363252, Smoothness: -59.000031, Status: True, Time: 47.342 , Reward: 29.379, Opt_time: 6.716 , Nav_Metric: 0.142 , World: world_0.world
 Train: Collision: 0, Recovery: 0.214854, Smoothness: -9.437743, Status: True, Time: 18.681 , Reward: 29.063, Opt_time: 6.716 , Nav_Metric: 0.360 , World: world_0.world
+Train: Collision: 0, Recovery: 0.383162, Smoothness: -26.948902, Status: True, Time: 29.058 , Reward: 29.072, Opt_time: 6.716 , Nav_Metric: 0.231 , World: world_0.world

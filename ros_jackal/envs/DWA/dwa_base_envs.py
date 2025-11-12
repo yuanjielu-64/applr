@@ -235,12 +235,19 @@ class DWABase(gym.Env):
 
     def _get_info(self):
         bn, nn = self.move_base.get_bad_vel_num()
+
+        if nn == 0:
+            print("Warning: nn is zero, using default recovery value")
+            r = 0.0
+        else:
+            r = 1.0 * bn / nn
+        
         self.collision_count += self.move_base.get_collision()
         return dict(
             world=self.world_name,
             time=rospy.get_time() - self.start_time,
             collision=self.collision_count,
-            recovery=1.0 * bn / nn,
+            recovery=r,
             smoothness=self.smoothness
         )
 
