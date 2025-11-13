@@ -61,16 +61,10 @@ namespace Antipatrea {
         robot->viewTrajectories(best_traj.first, nr_steps_, 0.0, timeInterval);
 
         if (result == false) {
-            publishCommand(cmd_vel, 0.5 , 0);
+            publishCommand(cmd_vel, -0.2 , 0);
         } else {
             publishCommand(cmd_vel, best_traj.first[1].velocity_ , best_traj.first[1].angular_velocity_);
         }
-
-//        if (result == false) {
-//            robot->setRobotState(Robot_config::BRAKE_PLANNING);
-//            publishCommand(cmd_vel, robot->getPoseState().velocity_, robot->getPoseState().angular_velocity_);
-//        } else
-//            publishCommand(cmd_vel, best_traj.first.front().velocity_, best_traj.first.front().angular_velocity_);
 
         return true;
     }
@@ -425,7 +419,7 @@ namespace Antipatrea {
         for (int i = 0; i < nr_steps_; ++i) {
             motion(state_, 0.0000001, angular_velocity);
             trajectory.first[i] = state_;
-            motion(state_odom, 0.0000001, angular_velocity);
+            motion(state_odom_, 0.0000001, angular_velocity);
             trajectory.second[i] = state_odom_;
             //n++;
         }
@@ -537,7 +531,6 @@ namespace Antipatrea {
         Cost cost;
 
         cost.to_goal_cost_ = calc_to_goal_cost(trajectory.first);
-
         cost.obs_cost_ = calc_obs_cost(trajectory.first);
         cost.speed_cost_ = calc_speed_cost(trajectory.first);
         cost.path_cost_ = calc_path_cost(trajectory.first);

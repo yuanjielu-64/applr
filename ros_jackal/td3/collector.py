@@ -67,7 +67,7 @@ class LocalCollector(object):
             if done:
                 obs = env.reset()
                 if self.ddp <= 1:
-                    type = 'ddp'
+                    type = 'MPPI'
                 else:
                     type = 'adp'
                     if info['status'] == 'flip' or info['status'] == 'timeout' or info['collision'] >= 1:

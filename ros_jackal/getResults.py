@@ -167,7 +167,7 @@ def collect_test_log_data(log_file_path, top_n_per_env=20):
     return combined_df, processed_files, missing_files
 
 
-def collect_baseline_data(baseline_dir="buffer/ddp/test0", top_n_per_env=20):
+def collect_baseline_data(baseline_dir="buffer/MPPI/test0", top_n_per_env=20):
     """
     Collect all baseline data
     
@@ -325,7 +325,7 @@ def calculate_environment_statistics(combined_df, processed_files, use_existing_
     return results
 
 
-def analyze_baseline_results(baseline_dir="buffer/ddp/test0", top_n_per_env=20):
+def analyze_baseline_results(baseline_dir="buffer/MPPI/test0", top_n_per_env=20):
     # Step 1: Collect data
     combined_df, processed_files, missing_files = collect_baseline_data(baseline_dir, top_n_per_env)
 

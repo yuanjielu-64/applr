@@ -37,7 +37,7 @@ class DWABase(gym.Env):
         if init_position is None:
             init_position = [-2.25, 3, 1.57]
         if goal_position is None:
-            goal_position = [0, 15, 0]
+            goal_position = [0, 10, 0]
 
         self.rviz_gui = True
         self.base_local_planner = base_local_planner
@@ -86,9 +86,9 @@ class DWABase(gym.Env):
         world_name = join(self.BASE_PATH, "worlds/BARN/", world_name)
 
         if self.rviz_gui == False:
-            launch_file = join(self.BASE_PATH, 'launch', 'gazebo_launch.launch')
+            launch_file = join(self.BASE_PATH, 'launch', 'gazebo_applr_dwa.launch')
         else:
-            launch_file = join(self.BASE_PATH, 'launch', 'gazebo_launch_rviz.launch')
+            launch_file = join(self.BASE_PATH, 'launch', 'gazebo_applr_dwa_rviz.launch')
 
         self.gazebo_process = subprocess.Popen(['roslaunch',
                                                 launch_file,
@@ -106,11 +106,10 @@ class DWABase(gym.Env):
     def launch_move_base(self, goal_position, base_local_planner):
         rospack = rospkg.RosPack()
         self.BASE_PATH = rospack.get_path('jackal_helper')
-        launch_file = join(self.BASE_PATH, 'launch', 'move_base_launch.launch')
+        launch_file = join(self.BASE_PATH, 'launch', 'move_base_applr_dwa.launch')
         self.move_base_process = subprocess.Popen(
             ['roslaunch', launch_file, 'base_local_planner:=' + base_local_planner])
 
-        # 等待move_base启动和costmap初始化
         time.sleep(3)
 
         self.move_base = DWA_move_base(goal_position=goal_position, base_local_planner=base_local_planner)
@@ -241,7 +240,7 @@ class DWABase(gym.Env):
             r = 0.0
         else:
             r = 1.0 * bn / nn
-        
+
         self.collision_count += self.move_base.get_collision()
         return dict(
             world=self.world_name,

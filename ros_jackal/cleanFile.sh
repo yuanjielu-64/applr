@@ -17,18 +17,18 @@ else
     echo "⚠ 未找到目录: logging/adaptive_dynamics_planning_v0"
 fi
 
-# 清理 buffer 目录中所有包含 "ddp" 的目录
+# 清理 buffer 目录中所有包含 "MPPI" 的目录
 if [ -d "buffer" ]; then
     echo "正在搜索包含 'ddp' 的目录..."
     
-    # 使用 find 命令查找所有包含 ddp 的目录
+    # 使用 find 命令查找所有包含 MPPI 的目录
     ddp_dirs=$(find buffer -type d -name "*ddp*" 2>/dev/null)
     
     if [ -n "$ddp_dirs" ]; then
         echo "找到以下包含 'ddp' 的目录:"
         echo "$ddp_dirs"
         
-        # 删除所有找到的包含 ddp 的目录
+        # 删除所有找到的包含 MPPI 的目录
         echo "$ddp_dirs" | while read -r dir; do
             if [ -n "$dir" ]; then
                 echo "正在删除: $dir"

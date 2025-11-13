@@ -35,12 +35,6 @@ void Robot_config::robotStatusCallback(const nav_msgs::Odometry::ConstPtr &msg) 
 
     robot_state.valid_ = true;
 
-    // check if the goal is reach
-    if (!global_goal_odom.empty()) {
-        double dist = l2_distance(robot_state.x_, robot_state.y_, global_goal_odom[0], global_goal_odom[1]);
-        if (dist <= 1)
-            can_move = false;
-    }
 }
 
 void Robot_config::laserScanCallback(const sensor_msgs::LaserScan::ConstPtr &msg) {
@@ -139,9 +133,11 @@ void Robot_config::costmapCallback(const nav_msgs::OccupancyGrid::ConstPtr &msg)
 void Robot_config::globalPathCallback(const nav_msgs::Path::ConstPtr &msg) {
 
     // start to find local and global goal
-    if (global_goal_odom.empty() || timeInterval.empty()) {
+    if (global_goal_odom.empty()) {
         return;
     }
+
+    getGoal = true;
 
     local_paths.clear();
     local_paths_odom.clear();
@@ -252,68 +248,15 @@ void Robot_config::globalPathCallback(const nav_msgs::Path::ConstPtr &msg) {
 
         length += dist;
 
-        if (getAlgorithm() == DWA || getAlgorithm() == DDPDWA) {
-            v = initial_v;
-            thresholdSq = 2 * v + 1;
+        thresholdSq = 2 * v + 1;
 
-            if (length >= thresholdSq && flag == false) {
-                lg = transform_lg(xhat[i], yhat[i], robot_state.x_, robot_state.y_, robot_state.theta_);
-                setLocalGoal(lg, xhat[i], yhat[i]);
-                flag = true;
-                break;
-            }
-        } else if (getAlgorithm() == LuPlanner || getAlgorithm() == DDPLuPlanner) {
-            v = initial_v;
-            thresholdSq = 2 * v + 1;
-
-            if (length >= thresholdSq && flag == false) {
-                lg = transform_lg(xhat[i], yhat[i], robot_state.x_, robot_state.y_, robot_state.theta_);
-                setLocalGoal(lg, xhat[i], yhat[i]);
-                flag = true;
-                break;
-            }
-        } else {
-            if (getRobotState() == NORMAL_PLANNING) {
-                v = initial_v;
-                thresholdSq = 2 * v + 1;
-                if (length >= thresholdSq && flag == false) {
-                    lg = transform_lg(xhat[i], yhat[i], robot_state.x_, robot_state.y_, robot_state.theta_);
-                    setLocalGoal(lg, xhat[i], yhat[i]);
-                    flag = true;
-                    break;
-                }
-            } else if (getRobotState() == LOW_SPEED_PLANNING) {
-                v = initial_v / 2;
-
-                thresholdSq = 2 * v + 0.25;
-
-                if (length >= thresholdSq && flag == false) {
-                    lg = transform_lg(xhat[i], yhat[i], robot_state.x_, robot_state.y_, robot_state.theta_);
-                    setLocalGoal(lg, xhat[i], yhat[i]);
-                    flag = true;
-                    break;
-                }
-
-            } else if (getRobotState() == NO_MAP_PLANNING){
-                v = 2;
-                thresholdSq = v;
-                if (length >= thresholdSq && flag == false) {
-                    lg = transform_lg(xhat[i], yhat[i], robot_state.x_, robot_state.y_, robot_state.theta_);
-                    setLocalGoal(lg, xhat[i], yhat[i]);
-                    flag = true;
-                    break;
-                }
-            }else {
-                v = initial_v / 2;
-                thresholdSq = v;
-                if (length >= thresholdSq && flag == false) {
-                    lg = transform_lg(xhat[i], yhat[i], robot_state.x_, robot_state.y_, robot_state.theta_);
-                    setLocalGoal(lg, xhat[i], yhat[i]);
-                    flag = true;
-                    break;
-                }
-            }
+        if (length >= thresholdSq && flag == false) {
+            lg = transform_lg(xhat[i], yhat[i], robot_state.x_, robot_state.y_, robot_state.theta_);
+            setLocalGoal(lg, xhat[i], yhat[i]);
+            flag = true;
+            break;
         }
+
     }
 
     if (!flag) {
@@ -358,30 +301,7 @@ void Robot_config::globalPathCallback(const nav_msgs::Path::ConstPtr &msg) {
 }
 
 void Robot_config::update_angular_velocity() {
-    if (getAlgorithm() == DWA || getAlgorithm() == DDPLuPlanner) {
-        if (getRobotState() == NORMAL_PLANNING)
-            w = 2;
-        else if (getRobotState() == LOW_SPEED_PLANNING)
-            w = 1;
-    } else {
-        if (getRobotState() == NORMAL_PLANNING) {
-            if (abs(getPoseState().angular_velocity_) <= 1 && abs(getPoseState().velocity_) <=  1 * v / 3)
-                w = 2;
-            else if ((abs(getPoseState().angular_velocity_) <= 2 && abs(getPoseState().angular_velocity_) > 1 * v / 3) || (
-                         abs(getPoseState().velocity_) > 1 && abs(getPoseState().velocity_) <= 2 * v / 3))
-                w = 1.5;
-            else
-                w = 1.0;
-        } else if (getRobotState() == LOW_SPEED_PLANNING) {
-            if (abs(getPoseState().angular_velocity_) <= 1 && abs(getPoseState().velocity_) <= 1 * v / 3)
-                w = 2.5;
-            else if ((abs(getPoseState().angular_velocity_) <= 2 && abs(getPoseState().angular_velocity_) > 1 * v / 3) || (
-                         abs(getPoseState().velocity_) > 0.2 && abs(getPoseState().velocity_) <= 2 * v / 3))
-                w = 2;
-            else
-                w = 1.5;
-        }
-    }
+
 }
 
 bool Robot_config::isPaused() const {
@@ -433,12 +353,37 @@ void Robot_config::arrayCallback(const std_msgs::Float64MultiArray::ConstPtr& ms
 
 void Robot_config::paramsCallback(const std_msgs::Float64MultiArray::ConstPtr& msg) {
 
-    if (msg->data.empty()) {
-        ROS_WARN("Received empty dynamics data");
-        return;
+    if (getAlgorithm() == DWA) {
+        if (msg->data.empty()) {
+            ROS_WARN("Received empty dynamics data");
+            return;
+        }
+
+        v = msg->data[0];
+        w = msg->data[1];
+        vx_sample = msg->data[2];
+        vTheta_samples = msg->data[3];
+        path_distance_bias = msg->data[4];
+        goal_distance_bias = msg->data[5];
+
     }
 
-    initial_v = msg->data[0];
+    if (getAlgorithm() == LuPlanner) {
+
+        if (msg->data.empty()) {
+            ROS_WARN("Received empty dynamics data");
+            return;
+        }
+
+        v = msg->data[0];
+        w = msg->data[1];
+        nr_pairs_ = msg->data[2];
+        nr_steps_ = msg->data[3];
+        linear_stddev = msg->data[4];
+        angular_stddev = msg->data[5];
+        lambda = msg->data[6];
+
+    }
 
     param_received = true;
 
@@ -566,7 +511,12 @@ void Robot_config::resetStoppedStatus() {
 
 bool Robot_config::setup() {
 
-    if (!isPaused() && getRobotState() != INITIALIZING && !timeInterval.empty() && getPoseState().valid_ && can_move ) {
+    if (global_goal_odom.empty()) {
+        global_goal_odom = {0, 10};
+        setRobotState(NORMAL_PLANNING);
+    }
+
+    if (!isPaused() && getRobotState() != INITIALIZING  && getPoseState().valid_ && can_move && getGoal ) {
         return true;
     }
 
@@ -695,7 +645,7 @@ Robot_config::Robot_config()
                                                    this);
 
     array_dt_sub = nh.subscribe("/dy_dt", 1, &Robot_config::arrayCallback, this);
-    params_sub = nh.subscribe("/adp_params", 1, &Robot_config::paramsCallback, this);
+    params_sub = nh.subscribe("/ddp_params", 1, &Robot_config::paramsCallback, this);
 
     trajectory_pub = nh.advertise<nav_msgs::Path>("trajectory", 10);
     global_path_pub = nh.advertise<nav_msgs::Path>("global_path", 10);
@@ -703,7 +653,7 @@ Robot_config::Robot_config()
     global_goal_pub = nh.advertise<visualization_msgs::Marker>("global_goal", 1);
     cmd_vel_pub = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
 
-     robot_state_pub = nh.advertise<std_msgs::String>("/robot_mode", 1);
+    robot_state_pub = nh.advertise<std_msgs::String>("/robot_mode", 1);
 
     global_path_clt = nh.serviceClient<nav_msgs::GetPlan>("/move_base/NavfnROS/make_plan");
     clear_costmaps_clt = nh.serviceClient<std_srvs::Empty>("/move_base/clear_costmaps");

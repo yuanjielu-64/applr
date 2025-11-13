@@ -23,6 +23,7 @@ From: ros:noetic
         ros-noetic-gazebo-ros-pkgs \
         ros-noetic-gazebo-ros-control \
         ros-noetic-tf2 \
+        ros-noetic-teb-local-planner \ 
         ros-noetic-tf2-ros \
         ros-noetic-tf2-geometry-msgs \
         ros-noetic-tf2-msgs \

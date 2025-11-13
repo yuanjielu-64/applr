@@ -9,5 +9,5 @@ killall gzserver
 
 WORLD_IDX=$1
 
-python run_test.py --world_idx $WORLD_IDX --gui false
+python run_test.py --world_idx $WORLD_IDX --gui true
 

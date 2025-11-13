@@ -130,12 +130,20 @@ def transform_gp(gp, X, Y, PSI):
 
 class Teb_move_base():
 
-    def __init__(self, goal_position=[6, 6, 0], base_local_planner="base_local_planner/TrajectoryPlannerROS"):
+    def __init__(self, goal_position=[6, 6, 0], base_local_planner="teb_local_planner/TebLocalPlannerROS"):
+
         self.goal_position = goal_position
         self.base_local_planner = base_local_planner.split("/")[-1]
         self.planner_client = dynamic_reconfigure.client.Client('/move_base/' + self.base_local_planner)
-        self.local_costmap_client = dynamic_reconfigure.client.Client('move_base/local_costmap/inflater_layer')
-        self.global_costmap_client = dynamic_reconfigure.client.Client('move_base/global_costmap/inflater_layer')
+        self.local_costmap_client = dynamic_reconfigure.client.Client('move_base/local_costmap/inflation_layer')
+        self.global_costmap_client = dynamic_reconfigure.client.Client('move_base/global_costmap/inflation_layer')
+
+        self.local_costmap_config_client = dynamic_reconfigure.client.Client('move_base/local_costmap')
+        self.local_costmap_config_client.update_configuration({'update_frequency': 10.0})
+
+        self.move_base_config_client = dynamic_reconfigure.client.Client('move_base')
+        self.move_base_config_client.update_configuration({'controller_frequency': 10.0})
+
         self.nav_as = actionlib.SimpleActionClient('/move_base', MoveBaseAction)
         self.global_goal = _create_MoveBaseGoal(goal_position[0], goal_position[1], goal_position[2])
         self._reset_odom = rospy.ServiceProxy('/set_pose', SetPose)

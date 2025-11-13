@@ -309,11 +309,27 @@ public:
     std::vector<std::vector<double>> costmapDataOdom;
     std::vector<std::vector<double>> costmapData;
     std::vector<double> laserDataDistance;
-    std::vector<double> timeInterval;
 
-    double initial_v = 0;
+    std::vector<double> timeInterval= {
+        0.0302, 0.0495, 0.0608, 0.0697, 0.0771, 0.0835, 0.0893, 0.0946, 0.0994, 0.1039,
+        0.1082, 0.1122, 0.116, 0.1196, 0.1231, 0.1264, 0.1296, 0.1327, 0.1357, 0.1386
+    };
+
+    // parameters
+    double max_vel_x = 1.5;
+    double max_vel_y = 0;
+
     double v = 1.5;
     double w = 1;
+    double vx_sample = 10;
+    double vTheta_samples = 10;
+    double path_distance_bias = 0.7;
+    double goal_distance_bias = 0.7;
+    double nr_pairs_ = 600;
+    double nr_steps_ = 20;
+    double linear_stddev = 0.1;
+    double angular_stddev = 0.05;
+    double lambda = 1;
 
     int recover_times = 0;
     int re = 1;

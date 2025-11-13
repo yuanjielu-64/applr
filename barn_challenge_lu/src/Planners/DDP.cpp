@@ -39,7 +39,6 @@ namespace Antipatrea {
 
         normalParameters(*robot);
 
-
         const double angle_to_goal = calculateTheta(parent, &robot->getGlobalGoalCfg()[0]);
 
         double angular = std::clamp(angle_to_goal, -1.0, 1.0);
@@ -51,6 +50,7 @@ namespace Antipatrea {
 
     bool DDP::handleNormalSpeedPlanning(geometry_msgs::Twist &cmd_vel,
                                         std::pair<std::vector<PoseState>, bool> &best_traj, double dt) {
+
         if (robot->setting(Robot_config::ONLY_LASER_RECEIVED, 2) == false)
             return false;
 
@@ -215,12 +215,7 @@ namespace Antipatrea {
         //      weights.push_back(weight);
         //  }
 
-        // timeInterval = robot->timeInterval;
-
-        // timeInterval = {
-        //     0.0302, 0.0495, 0.0608, 0.0697, 0.0771, 0.0835, 0.0893, 0.0946, 0.0994, 0.1039,
-        //     0.1082, 0.1122, 0.116, 0.1196, 0.1231, 0.1264, 0.1296, 0.1327, 0.1357, 0.1386
-        // };
+        timeInterval = robot->timeInterval;
 
         best_traj.first.reserve(nr_steps_);
 
@@ -228,7 +223,7 @@ namespace Antipatrea {
 
         Window dw = calc_dynamic_window(state, dt);
 
-        num_threads = (int) 8;
+        num_threads = (int) 16;
         // Logger::m_out << "num_threads " << num_threads << std::endl;
 
         std::vector<std::vector<Cost> > thread_costs(num_threads);
@@ -410,7 +405,6 @@ namespace Antipatrea {
             return false;
         }
 
-
         normalize_costs(costs);
 
         const size_t max_elements = 10;
@@ -545,7 +539,7 @@ namespace Antipatrea {
         for (int i = 0; i < nr_steps_; ++i) {
             motion(state_, 0.0000001, angular_velocity, timeInterval[i]);
             trajectory.first[i] = state_;
-            motion(state_odom, 0.0000001, angular_velocity, timeInterval[i]);
+            motion(state_odom_, 0.0000001, angular_velocity, timeInterval[i]);
             trajectory.second[i] = state_odom_;
             //n++;
         }

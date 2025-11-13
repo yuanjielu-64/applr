@@ -530,7 +530,7 @@ namespace Antipatrea {
         for (int i = 0; i < nr_steps_; ++i) {
             motion(state_, 0.0000001, angular_velocity, timeInterval[i]);
             trajectory.first[i] = state_;
-            motion(state_odom, 0.0000001, angular_velocity, timeInterval[i]);
+            motion(state_odom_, 0.0000001, angular_velocity, timeInterval[i]);
             trajectory.second[i] = state_odom_;
             //n++;
         }

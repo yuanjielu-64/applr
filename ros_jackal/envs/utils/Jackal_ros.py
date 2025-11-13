@@ -67,7 +67,7 @@ class JackalRos:
 
     def _setup_publisher(self):
         self._dynamics_pub = rospy.Publisher('/dy_dt', Float64MultiArray, queue_size=1)
-        self._params_pub = rospy.Publisher('/adp_params', Float64MultiArray, queue_size=1)
+        self._params_pub = rospy.Publisher('/params', Float64MultiArray, queue_size=1)
 
     def _collision_callback(self, msg):
 
@@ -135,12 +135,12 @@ class JackalRos:
         if v is None:
             msg.data = []
         else:
-            # 处理不同类型的 v
-            if hasattr(v, 'tolist'):  # numpy array
+
+            if hasattr(v, 'tolist'):
                 msg.data = v.tolist()
-            elif isinstance(v, (list, tuple)):  # 已经是列表或元组
+            elif isinstance(v, (list, tuple)):
                 msg.data = list(v)
-            else:  # 单个数值 (int, float)
+            else:
                 msg.data = [float(v)]
 
         self._params_pub.publish(msg)

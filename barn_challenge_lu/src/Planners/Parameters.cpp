@@ -24,7 +24,8 @@ namespace Antipatrea {
         v_steps_ = 20;
         w_steps_ = 20;
         nr_steps_ = (int) robot.timeInterval.size();
-        nr_pairs_ = 550;
+        //nr_pairs_ = 550;
+        nr_pairs_ = 800;
 
         global_goal = robot.getGlobalGoalCfg();
         local_goal = robot.getLocalGoalCfg();
@@ -51,7 +52,8 @@ namespace Antipatrea {
         v_steps_ = 20;
         w_steps_ = 20;
         nr_steps_ = (int) robot.timeInterval.size();
-        nr_pairs_ = 550;
+        //nr_pairs_ = 550;
+        nr_pairs_ = 800;
 
         global_goal = robot.getGlobalGoalCfg();
         local_goal = robot.getLocalGoalCfg();
@@ -79,7 +81,8 @@ namespace Antipatrea {
         v_steps_ = 20;
         w_steps_ = 20;
         nr_steps_ = (int) robot.timeInterval.size();
-        nr_pairs_ = 550;
+        //nr_pairs_ = 550;
+        nr_pairs_ = 800;
 
         global_goal = robot.getGlobalGoalCfg();
         local_goal = robot.getLocalGoalCfg();
@@ -261,8 +264,8 @@ namespace Antipatrea {
     }
 
     void DWAPlanner::normalParameters(Robot_config &robot) {
-        v_steps_ = 20;
-        w_steps_ = 18;
+        v_steps_ = (int) robot.vx_sample;
+        w_steps_ = (int) robot.vTheta_samples;
         nr_steps_ = 20;
 
         dt = robot.dt;
@@ -274,18 +277,17 @@ namespace Antipatrea {
         robot_radius_ = 0.1;
 
         use_goal_cost_ = true;
-        use_angular_cost_ = true;
         use_path_cost_ = true;
+        use_angular_cost_ = false;
         use_speed_cost_ = false;
         use_ori_cost_ = false;
 
-        to_goal_cost_gain_ = 0.7;
+        to_goal_cost_gain_ = goal_distance_bias;
         obs_cost_gain_ = 0.7;
         speed_cost_gain_ = 0.1;
-        path_cost_gain_ = 0.7;
+        path_cost_gain_ = path_distance_bias;
         ori_cost_gain_ = 0.2;
         aw_cost_gain_ = 0.2;
-
 
         for (int i = 0; i < nr_steps_; ++i) {
             timeInterval.push_back(dt);
@@ -517,8 +519,12 @@ namespace Antipatrea {
      void MPPIPlanner::normalParameters(Robot_config &robot) {
         v_steps_ = 20;
         w_steps_ = 20;
-        nr_steps_ = 20;
-        nr_pairs_ = 600;
+        nr_steps_ = (int) robot.nr_steps_;
+        nr_pairs_ = (int) robot.nr_pairs_;
+        linear_stddev = robot.linear_stddev;
+        angular_stddev = robot.angular_stddev;
+        lambda = robot.lambda;
+        exploration_ratio = 0.8;
 
         global_goal = robot.getGlobalGoalCfg();
         local_goal = robot.getLocalGoalCfg();

@@ -113,8 +113,8 @@ class MoveBase():
         self.goal_position = goal_position
         self.base_local_planner = base_local_planner.split("/")[-1]
         self.planner_client = dynamic_reconfigure.client.Client('/move_base/' + self.base_local_planner)
-        self.local_costmap_client = dynamic_reconfigure.client.Client('move_base/local_costmap/inflater_layer')
-        self.global_costmap_client = dynamic_reconfigure.client.Client('move_base/global_costmap/inflater_layer')
+        self.local_costmap_client = dynamic_reconfigure.client.Client('move_base/local_costmap/inflation_layer')
+        self.global_costmap_client = dynamic_reconfigure.client.Client('move_base/global_costmap/inflation_layer')
         self.nav_as = actionlib.SimpleActionClient('/move_base', MoveBaseAction)
         self.global_goal = _create_MoveBaseGoal(goal_position[0], goal_position[1], goal_position[2])
         self._reset_odom = rospy.ServiceProxy('/set_pose', SetPose)

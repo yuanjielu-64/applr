@@ -253,6 +253,8 @@ namespace Antipatrea {
         int v_steps_ = 20;
         int w_steps_ = 20;
         int state_dims = 5;
+        double path_distance_bias = 0.7;
+        double goal_distance_bias = 0.8;
 
         PoseState parent;
         PoseState parent_odom;

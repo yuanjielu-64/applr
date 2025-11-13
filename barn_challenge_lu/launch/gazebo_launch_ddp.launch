@@ -43,7 +43,6 @@
   <node pkg="barn_challenge_lu" type="Runner" name="Runner" output="screen"
     args="RunMP $(find barn_challenge_lu)/data/ParamsForJackalGlobal.txt UseMP DDP"/>
 
-
   <param name="use_gui" value="true"/>
   <arg name="configs" default="robot" />
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find barn_challenge_lu)/rviz/a.rviz" />
@@ -53,8 +52,8 @@
   <arg name="scan_topic" default="$(eval optenv('JACKAL_LASER_TOPIC', 'front/scan'))" />
 
   <!--- Run GMapping for SLAM -->
-  <include file="$(find jackal_navigation)/launch/include/gmapping.launch">
-    <arg name="scan_topic" value="$(arg scan_topic)" />
-  </include>
+<!--   <include file="$(find jackal_navigation)/launch/include/gmapping.launch"> -->
+<!--     <arg name="scan_topic" value="$(arg scan_topic)" /> -->
+<!--   </include> -->
 
 </launch>

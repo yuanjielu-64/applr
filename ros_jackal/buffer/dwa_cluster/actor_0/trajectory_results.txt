@@ -2,3 +2,7 @@ Train: Collision: 0, Recovery: 0.439667, Smoothness: -42.391553, Status: True, T
 Train: Collision: 0, Recovery: 0.363252, Smoothness: -59.000031, Status: True, Time: 47.342 , Reward: 29.379, Opt_time: 6.716 , Nav_Metric: 0.142 , World: world_0.world
 Train: Collision: 0, Recovery: 0.214854, Smoothness: -9.437743, Status: True, Time: 18.681 , Reward: 29.063, Opt_time: 6.716 , Nav_Metric: 0.360 , World: world_0.world
 Train: Collision: 0, Recovery: 0.383162, Smoothness: -26.948902, Status: True, Time: 29.058 , Reward: 29.072, Opt_time: 6.716 , Nav_Metric: 0.231 , World: world_0.world
+Train: Collision: 0, Recovery: 0.072948, Smoothness: -4.174040, Status: True, Time: 16.414 , Reward: 29.097, Opt_time: 6.716 , Nav_Metric: 0.409 , World: world_0.world
+Train: Collision: 0, Recovery: 0.196643, Smoothness: -14.557438, Status: True, Time: 20.664 , Reward: 29.050, Opt_time: 6.716 , Nav_Metric: 0.325 , World: world_0.world
+Train: Collision: 0, Recovery: 0.345297, Smoothness: -40.733246, Status: True, Time: 40.355 , Reward: 29.473, Opt_time: 6.716 , Nav_Metric: 0.166 , World: world_0.world
+Train: Collision: 0, Recovery: 0.170507, Smoothness: -17.517006, Status: True, Time: 21.565 , Reward: 29.068, Opt_time: 6.716 , Nav_Metric: 0.311 , World: world_0.world

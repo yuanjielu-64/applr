@@ -32,8 +32,8 @@ def path_coord_to_gazebo_coord(x, y):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='test BARN navigation challenge')
     parser.add_argument('--world_idx', type=int, default=0)
-    parser.add_argument('--planner', type=str, default="ddp")
-    parser.add_argument('--gui', type=str, default="false")
+    parser.add_argument('--planner', type=str, default="MPPI")
+    parser.add_argument('--gui', type=str, default="true")
     parser.add_argument('--out', type=str, default="out.txt")
     args = parser.parse_args()
 
@@ -101,24 +101,24 @@ if __name__ == "__main__":
     ## (Customize this block to add your own navigation stack)
     ##########################################################################################
 
-    launch_file = join(base_path, "launch/move_base_Lu.launch")
-    nav_stack_process = subprocess.Popen([
-        'roslaunch',
-        launch_file,
-    ])
+    # launch_file = join(base_path, "launch/move_base_Lu.launch")
+    # nav_stack_process = subprocess.Popen([
+    #     'roslaunch',
+    #     launch_file,
+    # ])
 
-    # Make sure your navigation stack recives the correct goal position defined in GOAL_POSITION
-    import actionlib
-    from geometry_msgs.msg import Quaternion
-    from move_base_msgs.msg import MoveBaseGoal, MoveBaseAction
+    # # Make sure your navigation stack recives the correct goal position defined in GOAL_POSITION
+    # import actionlib
+    # from geometry_msgs.msg import Quaternion
+    # from move_base_msgs.msg import MoveBaseGoal, MoveBaseAction
 
-    nav_as = actionlib.SimpleActionClient('/move_base', MoveBaseAction)
-    mb_goal = MoveBaseGoal()
-    mb_goal.target_pose.header.frame_id = 'odom'
-    mb_goal.target_pose.pose.position.x = GOAL_POSITION[0]
-    mb_goal.target_pose.pose.position.y = GOAL_POSITION[1]
-    mb_goal.target_pose.pose.position.z = 0
-    mb_goal.target_pose.pose.orientation = Quaternion(0, 0, 0, 1)
+    # nav_as = actionlib.SimpleActionClient('/move_base', MoveBaseAction)
+    # mb_goal = MoveBaseGoal()
+    # mb_goal.target_pose.header.frame_id = 'odom'
+    # mb_goal.target_pose.pose.position.x = GOAL_POSITION[0]
+    # mb_goal.target_pose.pose.position.y = GOAL_POSITION[1]
+    # mb_goal.target_pose.pose.position.z = 0
+    # mb_goal.target_pose.pose.orientation = Quaternion(0, 0, 0, 1)
 
-    nav_as.wait_for_server()
-    nav_as.send_goal(mb_goal)
+    # nav_as.wait_for_server()
+    # nav_as.send_goal(mb_goal)
