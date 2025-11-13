@@ -65,9 +65,9 @@ if [ -d "logging" ]; then
     
     # 要删除的目录列表
     dirs_to_delete=(
-        "adaptive_dynamics_planning_v0"
-        "adaptive_dynamics_planning_functional_v0"
-        "adaptive_dynamics_planning_continus_v0"
+        "dwa_param-v0"
+        "mppi_param-v0"
+        "teb_param-v0"
     )
     
     for dir in "${dirs_to_delete[@]}"; do

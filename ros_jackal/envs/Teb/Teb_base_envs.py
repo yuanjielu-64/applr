@@ -161,6 +161,7 @@ class TebBase(gym.Env):
         self._take_action(action)
         self.step_count += 1
         self.gazebo_sim.unpause()
+        self.jackal_ros.set_params(action)
         obs = self._get_observation()
         rew = self._get_reward()
         done = self._get_done()

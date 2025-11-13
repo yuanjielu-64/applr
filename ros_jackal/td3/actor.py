@@ -153,7 +153,7 @@ class FileSync:
 
             info_dict = traj[-1][4]
 
-            if (info_dict['recovery'] == 1.0 and info_dict['status'] == 'timeout') or (info_dict['time'] >= 70):
+            if (info_dict['recovery'] == 1.0 and info_dict['success'] == True) or (info_dict['time'] >= 70):
                 error_dir = os.path.join(BUFFER_PATH, 'actor_error')
                 os.makedirs(error_dir, exist_ok=True)
 
@@ -161,7 +161,7 @@ class FileSync:
 
                 with open(error_file, 'a') as f:
                     f.write(
-                        f"Environment {id} and World_name {info_dict['world']} has KeyError in info_dict, time: {info_dict['time']}, recovery: {info_dict['recovery']}, status: {info_dict['status']}\n")
+                        f"Environment {id} and World_name {info_dict['world']} has KeyError in info_dict, time: {info_dict['time']}, recovery: {info_dict['recovery']}, status: {info_dict['success']}\n")
 
                 return
 
@@ -180,7 +180,7 @@ class FileSync:
 
             info_dict = traj[-1][4]
 
-            if (info_dict['recovery'] == 1.0 and info_dict['status'] == 'timeout') or (info_dict['time'] >= 70):
+            if (info_dict['recovery'] == 1.0 and info_dict['success'] == True) or (info_dict['time'] >= 70):
                 error_dir = os.path.join(BUFFER_PATH, 'actor_error')
                 os.makedirs(error_dir, exist_ok=True)
 
@@ -188,7 +188,7 @@ class FileSync:
 
                 with open(error_file, 'a') as f:
                     f.write(
-                        f"Test environment {id} has KeyError in info_dict, time: {info_dict['time']}, recovery: {info_dict['recovery']}, status: {info_dict['status']}\n")
+                        f"Test environment {id} has KeyError in info_dict, time: {info_dict['time']}, recovery: {info_dict['recovery']}, status: {info_dict['success']}\n")
 
                 return
 
@@ -200,7 +200,7 @@ class FileSync:
             with open(join(self.actor_dir, "trajectory_results.txt"), 'a') as f:
 
                 f.write(
-                    f"Test: Collision: {info_dict['collision']}, Recovery: {info_dict['recovery']:.6f}, Smoothness: {info_dict['smoothness']:.6f}, Status: {info_dict['status']}, Time: {info_dict['time']:.3f} , Reward: {total_reward:.3f}, Opt_time: {opt_time:.3f} , Nav_Metric: {nav_metric:.3f} , World: {info_dict['world']}\n")
+                    f"Test: Collision: {info_dict['collision']}, Recovery: {info_dict['recovery']:.6f}, Smoothness: {info_dict['smoothness']:.6f}, Status: {info_dict['success']}, Time: {info_dict['time']:.3f} , Reward: {total_reward:.3f}, Opt_time: {opt_time:.3f} , Nav_Metric: {nav_metric:.3f} , World: {info_dict['world']}\n")
 
             with open(join(path, 'test_%d_%d.pickle' % (id, ep)), 'wb') as f:
                 try:
