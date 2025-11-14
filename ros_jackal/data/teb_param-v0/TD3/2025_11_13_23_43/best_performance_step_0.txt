@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 0:
+Training Step: 1035
+Episode Reward: 29.856
+Episode Length: 13.392
+Success Rate: 0.000%

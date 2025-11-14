@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 2060:
+Training Step: 3097
+Episode Reward: 28.927
+Episode Length: 8.569
+Success Rate: 0.000%

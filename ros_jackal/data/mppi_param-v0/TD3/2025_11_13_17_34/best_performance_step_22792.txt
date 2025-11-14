@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 22792:
+Training Step: 23844
+Episode Reward: 37.956
+Episode Length: 18.259
+Success Rate: 0.000%

@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 5150:
+Training Step: 6178
+Episode Reward: 30.939
+Episode Length: 7.982
+Success Rate: 0.000%

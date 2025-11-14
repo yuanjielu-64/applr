@@ -19,3 +19,8 @@ register(
     id="mppi_param-v0",
     entry_point="envs.MPPI.mppi_envs:MPPIPlanning"
 )
+
+register(
+    id="ddp_param-v0",
+    entry_point="envs.DDP.ddp_envs:DDPPlanning"
+)

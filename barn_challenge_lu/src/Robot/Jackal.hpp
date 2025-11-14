@@ -330,6 +330,9 @@ public:
     double linear_stddev = 0.1;
     double angular_stddev = 0.05;
     double lambda = 1;
+    double local_goal_distance = 2;
+    double distance = 0.3;
+    double robot_radius_ = 0.01;
 
     int recover_times = 0;
     int re = 1;

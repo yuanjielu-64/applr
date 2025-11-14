@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 6178:
+Training Step: 7203
+Episode Reward: 30.343
+Episode Length: 6.521
+Success Rate: 0.000%

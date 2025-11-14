@@ -101,11 +101,11 @@ if __name__ == "__main__":
     ## (Customize this block to add your own navigation stack)
     ##########################################################################################
 
-    # launch_file = join(base_path, "launch/move_base_Lu.launch")
-    # nav_stack_process = subprocess.Popen([
-    #     'roslaunch',
-    #     launch_file,
-    # ])
+    launch_file = join(base_path, "launch/move_base_Lu.launch")
+    nav_stack_process = subprocess.Popen([
+        'roslaunch',
+        launch_file,
+    ])
 
     # # Make sure your navigation stack recives the correct goal position defined in GOAL_POSITION
     # import actionlib

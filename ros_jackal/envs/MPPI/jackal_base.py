@@ -105,7 +105,7 @@ class JackalBase(gym.Env):
         else:
             launch_file = join(self.BASE_PATH, 'launch', 'ddp_launch_rviz.launch')
 
-        if self.planner == 'DDP':
+        if self.planner == 'ddp':
             p1 = "RunMP"
             p2 = "DDP"
         elif self.planner == 'dwa':
@@ -155,10 +155,7 @@ class JackalBase(gym.Env):
         self.gazebo_sim.reset()
         self._reset_move_base()
 
-        # if self.use_RL:
-        #     self.jackal_ros.set_params(self.param_init)
-
-        self.jackal_ros.set_params(1.5)
+        self.jackal_ros.set_params(self.param_init)
 
         self.start_time = rospy.get_time()
         obs = self._get_observation()

@@ -364,7 +364,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description = 'Start training')
     parser.add_argument('--config_path', dest='config_path', default="../configs/")
-    parser.add_argument('--config_file', dest='config_file', default="Teb_cluster")
+    parser.add_argument('--config_file', dest='config_file', default="MPPI_cluster")
     parser.add_argument('--buffer_path', dest='buffer_path', default="../buffer/")
     parser.add_argument('--logging_path', dest='logging_path', default="../logging/")
     parser.add_argument('--buffer_size', dest='buffer_size', default= 300)

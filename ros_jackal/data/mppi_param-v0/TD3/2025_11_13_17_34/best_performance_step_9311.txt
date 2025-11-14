@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 9311:
+Training Step: 10341
+Episode Reward: 37.316
+Episode Length: 20.103
+Success Rate: 0.000%
