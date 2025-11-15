@@ -11,8 +11,8 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem-per-cpu=1GB
 
-SINGULARITY_BASE=/containers/dgx/UserContainers/
-SINGULARITY_IMG=$SINGULARITY_BASE/ylu22/jackal-final.sif
+SINGULARITY_BASE=/scratch/ylu22/applr/src/ros_jackal
+SINGULARITY_IMG=$SINGULARITY_BASE/jackal.sif
 
 export ROS_HOSTNAME=localhost
 export ROS_MASTER_URI=http://localhost:11311

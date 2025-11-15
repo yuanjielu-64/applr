@@ -46,7 +46,7 @@ def initialize_config(BUFFER_PATH):
 
     config = yaml.load(f, Loader=yaml.FullLoader)
 
-    if TEST_PATH is not None:
+    if TEST_PATH is not None and os.path.exists(TEST_PATH + '/config.yaml') == False:
 
         os.makedirs(TEST_PATH, exist_ok=True)
 
@@ -102,17 +102,17 @@ def write_buffer(init_pos, goal_pos, traj, ep, id):
 
    info_dict = traj[-1][-1]
 
-   opt_time, nav_metric = get_score(init_pos, goal_pos, info_dict['status'], info_dict['time'], info_dict['world'])
+   opt_time, nav_metric = get_score(init_pos, goal_pos, info_dict['success'], info_dict['time'], info_dict['world'])
 
    if not os.path.exists(file_name):
        with open(file_name, 'w', newline='') as f:
            writer = csv.writer(f)
-           writer.writerow(['Method', 'Episode', 'Collision', 'Recovery', 'Smoothness', 'Status', 'Time', 'Reward', 'World','optimal_time', 'nav_metric'])
+           writer.writerow(['Method', 'Episode', 'Collision', 'Recovery', 'Smoothness', 'Success', 'Time', 'Reward', 'World','optimal_time', 'nav_metric'])
 
    with open(file_name, 'a', newline='') as f:
        writer = csv.writer(f)
        writer.writerow([method_type, ep, info_dict['collision'], info_dict['recovery'], info_dict['smoothness'],
-                        info_dict['status'], info_dict['time'], total_reward, info_dict['world'], opt_time, nav_metric])
+                        info_dict['success'], info_dict['time'], total_reward, info_dict['world'], opt_time, nav_metric])
 
 def get_world_name(config, id):
     world_name = config["condor_config"]["test_worlds"][id]
@@ -131,13 +131,6 @@ def main(args):
     num_trials = config["condor_config"]["num_trials"]
     env_config = config['env_config']
     world_name = get_world_name(config, args.id)
-
-    time_interval = np.array([
-        0.0302, 0.0495, 0.0608, 0.0697, 0.0771,
-        0.0835, 0.0893, 0.0946, 0.0994, 0.1039,
-        0.1082, 0.1122, 0.116, 0.1196, 0.1231,
-        0.1264, 0.1296, 0.1327, 0.1357, 0.1386
-    ])
 
     env_config["kwargs"]["world_name"] = world_name
 
@@ -163,10 +156,8 @@ def main(args):
         done = False
 
         while not done:
-            if RUN_BASELINE == False:
-                actions = policy.select_action(obs)
-            else:
-                actions = time_interval
+
+            actions = policy.select_action(obs)
 
             obs_new, rew, done, info = env.step(actions)
             info["world"] = world_name
@@ -179,11 +170,11 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description = 'start an tester')
-    parser.add_argument('--id', dest='id', type = int, default = 7)
-    parser.add_argument('--policy_name', dest='policy_name', default="ddp_function")
+    parser.add_argument('--id', dest='id', type = int, default = 278)
+    parser.add_argument('--policy_name', dest='policy_name', default="teb_cluster")
     parser.add_argument('--test_id', dest='test_id', default="0")
     parser.add_argument('--buffer_path', dest='buffer_path', default="../buffer/")
-    parser.add_argument('--world_path', dest='world_path', default="../jackal_helper/worlds/BARN/")
+    parser.add_argument('--world_path', dest='world_path', default="../jackal_helper/worlds/BARN1/")
     parser.add_argument('--baseline', dest='baseline', type=str, default='false')
 
     args = parser.parse_args()
@@ -197,9 +188,9 @@ if __name__ == '__main__':
 
     BUFFER_PATH = BUFFER_PATH + args.policy_name
 
-    if (os.path.exists(BUFFER_PATH + '/test' + args.test_id) == False):
-        mkdir(BUFFER_PATH + '/test'+ args.test_id)
+    if (os.path.exists(BUFFER_PATH + '/test') == False):
+        mkdir(BUFFER_PATH + '/test')
 
-    TEST_PATH = BUFFER_PATH + '/test' + args.test_id
+    TEST_PATH = BUFFER_PATH + '/test'
 
     main(args)

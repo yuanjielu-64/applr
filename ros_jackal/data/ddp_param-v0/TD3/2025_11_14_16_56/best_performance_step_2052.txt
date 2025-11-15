@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 2052:
+Training Step: 3084
+Episode Reward: 34.410
+Episode Length: 12.828
+Success Rate: 0.000%

@@ -17,8 +17,8 @@ umask 0027
 
 nvidia-smi
 
-SINGULARITY_BASE=/containers/dgx/UserContainers/
-SINGULARITY_IMG=$SINGULARITY_BASE/ylu22/jackal-final.sif
+SINGULARITY_BASE=/scratch/ylu22/applr/src/ros_jackal
+SINGULARITY_IMG=$SINGULARITY_BASE/jackal.sif
 
 module load singularity
 
@@ -28,4 +28,4 @@ export ROS_LOG_DIR=/tmp
 
 cd ..
 
-./singularity_run.sh $SINGULARITY_IMG python3 td3/train.py --buffer_path buffer/ --config_path configs/ --logging_path logging/ --config_file TD3_function_cluster
+./singularity_run.sh $SINGULARITY_IMG python3 td3/train.py --buffer_path buffer/ --config_path configs/ --logging_path logging/ --config_file Teb_cluster

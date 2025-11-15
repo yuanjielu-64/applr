@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 3084:
+Training Step: 4136
+Episode Reward: 35.658
+Episode Length: 11.786
+Success Rate: 0.000%

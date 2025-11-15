@@ -11,8 +11,8 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem-per-cpu=1GB
 
-SINGULARITY_BASE=/containers/dgx/UserContainers/
-SINGULARITY_IMG=$SINGULARITY_BASE/ylu22/jackal-final.sif
+SINGULARITY_BASE=/scratch/ylu22/applr/src/ros_jackal
+SINGULARITY_IMG=$SINGULARITY_BASE/jackal.sif
 
 export ROS_HOSTNAME=localhost
 export ROS_MASTER_URI=http://localhost:11311
@@ -33,4 +33,4 @@ cd ..
 
 ACTOR_ID=$1
 
-./singularity_run.sh $SINGULARITY_IMG python3 td3/actor.py --buffer_path buffer/ --id $ACTOR_ID --world_path jackal_helper/worlds/BARN/
+./singularity_run.sh $SINGULARITY_IMG python3 td3/actor.py --buffer_path buffer/ --id $ACTOR_ID --world_path jackal_helper/worlds/BARN/ --policy_name teb_cluster

@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 8254:
+Training Step: 9283
+Episode Reward: 37.942
+Episode Length: 17.447
+Success Rate: 0.000%
