@@ -1,5 +1,0 @@
-Best Performance at TensorBoard Step 1028:
-Training Step: 2057
-Episode Reward: 31.405
-Episode Length: 10.163
-Success Rate: 0.000%

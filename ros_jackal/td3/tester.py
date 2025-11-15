@@ -61,9 +61,8 @@ def initialize_config(BUFFER_PATH):
     return config
 
 def get_score(INIT_POSITION, GOAL_POSITION, status, time, world):
-    success = False
 
-    if status == "success":
+    if status == True:
         success = True
     else:
         success = False
