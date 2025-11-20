@@ -240,10 +240,8 @@ void Robot_config::globalPathCallback(const nav_msgs::Path::ConstPtr &msg) {
 
     bool flag = false;
     double thresholdSq = 0;
-    if (getAlgorithm() == DDP)
-        thresholdSq = local_goal_distance;
-    else
-        thresholdSq = 2 * v + 1;
+
+    thresholdSq = local_goal_distance;
 
     double length = 0;
 
@@ -385,6 +383,7 @@ void Robot_config::paramsCallback(const std_msgs::Float64MultiArray::ConstPtr& m
         linear_stddev = msg->data[4];
         angular_stddev = msg->data[5];
         lambda = msg->data[6];
+        local_goal_distance = msg->data[7];
 
     }
 

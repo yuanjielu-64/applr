@@ -1,0 +1,6 @@
+Train: Collision: 5, Recovery: 0.112245, Smoothness: -4.014144, Status: collision, Time: 13.728 , Reward: -266.473, Opt_time: 5.809 , Nav_Metric: 0.000 , World: world_298.world
+Train: Collision: 5, Recovery: 0.003500, Smoothness: -5.414615, Status: collision, Time: 22.863 , Reward: -256.042, Opt_time: 5.809 , Nav_Metric: 0.000 , World: world_298.world
+Train: Collision: 0, Recovery: 0.000000, Smoothness: -6.335544, Status: success, Time: 30.663 , Reward: 109.573, Opt_time: 5.809 , Nav_Metric: 0.189 , World: world_298.world
+Train: Collision: 0, Recovery: 0.001351, Smoothness: -4.919947, Status: success, Time: 29.626 , Reward: 111.167, Opt_time: 5.809 , Nav_Metric: 0.196 , World: world_298.world
+Train: Collision: 0, Recovery: 0.000000, Smoothness: -6.144575, Status: success, Time: 18.982 , Reward: 121.093, Opt_time: 5.809 , Nav_Metric: 0.306 , World: world_298.world
+Train: Collision: 0, Recovery: 0.000000, Smoothness: -4.779717, Status: success, Time: 17.672 , Reward: 119.946, Opt_time: 5.809 , Nav_Metric: 0.329 , World: world_298.world

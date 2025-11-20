@@ -251,7 +251,7 @@ class CondorCollector(object):
 
                                         ep_rew = sum([t[2] for t in traj])
                                         ep_len = len(traj)
-                                        status = traj[-1][4]['success']
+                                        status = traj[-1][4]['status']
                                         ep_time = traj[-1][4]['time']
                                         world = traj[-1][4]['world']
                                         collision = traj[-1][4]['collision']
@@ -333,7 +333,7 @@ class CondorCollector(object):
                                     traj = pickle.load(f)
                                     ep_rew = sum([t[2] for t in traj])
                                     ep_len = len(traj)
-                                    status = traj[-1][4]['success']
+                                    status = traj[-1][4]['status']
                                     ep_time = traj[-1][4]['time']
                                     world = traj[-1][4]['world']
                                     collision = traj[-1][4]['collision']

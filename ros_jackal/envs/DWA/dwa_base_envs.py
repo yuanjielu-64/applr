@@ -121,21 +121,39 @@ class DWABase(gym.Env):
         np.random.seed(seed)
 
     def reset(self):
-        """reset the environment
+        """reset the environment without setting the goal
+        set_goal is replaced with make_plan
         """
-        self.step_count=0
-        # Reset robot in odom frame clear_costmap
-        self.gazebo_sim.unpause()
-        # Resets the state of the environment and returns an initial observation
+        self.step_count = 0
+
         self.gazebo_sim.reset()
+        self.jackal_ros.reset(self.param_init)
+
+        self.gazebo_sim.unpause()
         self._reset_move_base()
-        self.start_time = rospy.get_time()
+        self.jackal_ros.set_params(self.param_init)
         obs = self._get_observation()
         self.gazebo_sim.pause()
+
+        self._reset_reward()
+
         self.collision_count = 0
         self.traj_pos = []
         self.smoothness = 0
+
         return obs
+
+    def _reset_reward(self):
+        self.traj_pos = []
+        self.collision_count = 0
+        self.smoothness = 0
+
+        # self.Y = self.jackal_ros.get_robot_state()[1]
+        robot_pos = self.jackal_ros.get_robot_state()
+        self.last_distance = self._compute_distance(
+            [robot_pos[0], robot_pos[1]],
+            self.global_goal
+        )
 
     def _reset_move_base(self):
         # reset the move_base
@@ -153,15 +171,20 @@ class DWABase(gym.Env):
         self.move_base.clear_costmap()
 
     def step(self, action):
-        """take an action and step the environment
         """
+        take an action and step the environment
+        """
+
         self._take_action(action)
         self.step_count += 1
+
         self.gazebo_sim.unpause()
         obs = self._get_observation()
+        self.gazebo_sim.pause()
+
         rew = self._get_reward()
-        done = self._get_done()
-        info = self._get_info()
+        done, status = self._get_done()
+        info = self._get_info(status)
         self.gazebo_sim.pause()
         pos = self.gazebo_sim.get_model_state().pose.position
         self.traj_pos.append((pos.x, pos.y))
@@ -174,37 +197,52 @@ class DWABase(gym.Env):
         raise NotImplementedError()
 
     def _get_success(self):
-        # check the robot distance to the goal position
-
-        robot_position = np.array([self.move_base.robot_config.X,
-                                   self.move_base.robot_config.Y]) # robot position in odom frame
+        robot_position = [self.jackal_ros.get_robot_state()[0], self.jackal_ros.get_robot_state()[1]]
 
         if robot_position[1] > self.goal_position[1]:
             return True
 
-        if self.goal_position[1] == 10:
+        if self.global_goal[1] == 10:
             d = 1
         else:
             d = 4
 
-        if self._compute_distance(robot_position, self.goal_position[:2]) <= d:
+        if self._compute_distance(robot_position, self.global_goal) <= d:
             return True
 
         return False
 
     def _get_reward(self):
-        rew = self.slack_reward
+
+        if self.jackal_ros.get_collision():
+            return self.failure_reward
         if self.step_count >= self.max_step:  # or self._get_flip_status():
-            rew = self.failure_reward
+            return self.failure_reward
+
         if self._get_success():
-            rew = self.success_reward
-        laser_scan = np.array(self.move_base.get_laser_scan().ranges)
+            return self.success_reward
+        else:
+            rew = self.slack_reward
+
+        laser_scan = np.array(self.jackal_ros.laser_data.ranges)
         d = np.mean(sorted(laser_scan)[:10])
-        if d < 0.3:  # minimum distance 0.3 meter
-            rew += self.collision_reward / (d + 0.05)
+        if d < 0.05:
+            penalty_ratio = (1 - d / 0.05) ** 2
+            rew += self.collision_reward * penalty_ratio
+
+        robot_pos = self.jackal_ros.get_robot_state()
+        current_distance = self._compute_distance(
+            [robot_pos[0], robot_pos[1]],
+            self.global_goal
+        )
+
+        distance_progress = self.last_distance - current_distance
+        rew += distance_progress * 10
+        self.last_distance = current_distance
+
         smoothness = self._compute_angle(len(self.traj_pos) - 1)
-        # rew += self.smoothness_reward * smoothness
         self.smoothness += smoothness
+
         return rew
 
     def _compute_angle(self, idx):
@@ -225,28 +263,37 @@ class DWABase(gym.Env):
 
     def _get_done(self):
         success = self._get_success()
-        done = success or self.step_count >= self.max_step or self._get_flip_status()
-        return done
+        flip = self._get_flip_status()
+        timeout = self.step_count >= self.max_step
+        abort = self.jackal_ros.should_abort
+
+        if abort == True:
+            return True, "collision"
+
+        if success:
+            return True, "success"
+        elif flip:
+            return True, "flip"
+        elif timeout:
+            return True, "timeout"
+        else:
+            return False, "running"
 
     def _get_flip_status(self):
         robot_position = self.gazebo_sim.get_model_state().pose.position
         return robot_position.z > 0.1
 
-    def _get_info(self):
-        bn, nn = self.move_base.get_bad_vel_num()
+    def _get_info(self, status):
+        bn, nn = self.jackal_ros.get_bad_vel()
 
-        if nn == 0:
-            print("Warning: nn is zero, using default recovery value")
-            r = 0.0
-        else:
-            r = 1.0 * bn / nn
+        self.collision_count += self.jackal_ros.get_collision()
 
-        self.collision_count += self.move_base.get_collision()
         return dict(
             world=self.world_name,
-            time=rospy.get_time() - self.start_time,
+            time=rospy.get_time() - self.jackal_ros.start_time,
             collision=self.collision_count,
-            recovery=r,
+            status=status,
+            recovery= 1.0 * (bn + 0.0001) / (nn + 0.0001),
             smoothness=self.smoothness
         )
 

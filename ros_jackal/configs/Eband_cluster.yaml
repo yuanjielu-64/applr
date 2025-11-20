@@ -20,13 +20,16 @@ env_config:
     world_name: "world_0.world"
     gui: false
     verbose: false
-    max_step: 100
-    time_step: 1
+    max_step: 200
+    time_step: 0.5
     slack_reward: 0
     failure_reward: -100
-    success_reward: 20
+    success_reward: 50
+    collision_reward: -1
     init_position: [-2, 3, 1.57]
     goal_position: [0, 10, 0]
+
+    laser_clip: 2
 
 training_config:
   algorithm: "TD3"

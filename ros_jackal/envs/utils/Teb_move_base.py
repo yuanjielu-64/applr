@@ -9,6 +9,7 @@ import dynamic_reconfigure.client
 from robot_localization.srv import SetPose
 from pyquaternion import Quaternion as qt
 
+from std_msgs.msg import Bool
 from std_srvs.srv import Empty
 from gazebo_msgs.msg import ModelState
 from geometry_msgs.msg import Quaternion, Pose, PoseWithCovarianceStamped, Twist, PoseStamped
@@ -198,7 +199,8 @@ class Teb_move_base():
             laser_scan = self.get_laser_scan().ranges
             self.laser_scan = None
         d = np.mean(sorted(laser_scan)[:5])
-        return d < 0.3
+
+        return d < 0.01
 
     def set_global_goal(self):
         self.nav_as.wait_for_server()

@@ -83,7 +83,7 @@ class DWABase(gym.Env):
 
         rospack = rospkg.RosPack()
         self.BASE_PATH = rospack.get_path('jackal_helper')
-        world_name = join(self.BASE_PATH, "worlds/BARN/", world_name)
+        world_name = join(self.BASE_PATH, "worlds/BARN1/", world_name)
 
         if self.rviz_gui == False:
             launch_file = join(self.BASE_PATH, 'launch', 'gazebo_launch.launch')

@@ -103,6 +103,9 @@ def write_buffer(init_pos, goal_pos, traj, ep, id):
 
    opt_time, nav_metric = get_score(init_pos, goal_pos, info_dict['success'], info_dict['time'], info_dict['world'])
 
+   if (info_dict['collision'] >= 1):
+       nav_metric = 0.0
+
    if not os.path.exists(file_name):
        with open(file_name, 'w', newline='') as f:
            writer = csv.writer(f)
@@ -133,7 +136,7 @@ def main(args):
 
     env_config["kwargs"]["world_name"] = world_name
 
-    env_config["kwargs"]["max_step"] = 200
+    env_config["kwargs"]["max_step"] = 100
 
     init_pos = env_config["kwargs"]["init_position"]
     goal_pos = env_config["kwargs"]["goal_position"]
@@ -164,12 +167,14 @@ def main(args):
             obs = obs_new
 
             # _debug_print_robot_status(env, len(traj), rew)
+            if (info['collision'] >= 1):
+                done = True
 
         write_buffer(init_pos, goal_pos, traj, ep, args.id)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description = 'start an tester')
-    parser.add_argument('--id', dest='id', type = int, default = 278)
+    parser.add_argument('--id', dest='id', type = int, default = 298)
     parser.add_argument('--policy_name', dest='policy_name', default="teb_cluster")
     parser.add_argument('--test_id', dest='test_id', default="0")
     parser.add_argument('--buffer_path', dest='buffer_path', default="../buffer/")

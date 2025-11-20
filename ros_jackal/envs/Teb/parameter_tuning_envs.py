@@ -41,10 +41,10 @@ class TebParamContinuous(TebBase):
             dtype=np.float32
         )
 
-    def _get_info(self):
-        info = dict(success=self._get_success(), params=self.params)
-        info.update(super()._get_info())
-        return info
+    # def _get_info(self):
+    #     info = dict(success=self._get_success(), params=self.params)
+    #     info.update(super()._get_info())
+    #     return info
 
     def _take_action(self, action):
         assert len(action) == len(self.param_list), "length of the params should match the length of the action"
@@ -60,6 +60,8 @@ class TebParamContinuous(TebBase):
             # Wait for robot to navigate for one time step
         rospy.sleep(self.time_step)
         self.gazebo_sim.pause()
+
+        self.jackal_ros.last_action = action
 
 class TebParamContinuousLaser(TebParamContinuous, TebBaseLaser):
     def __init__(self, **kwargs):

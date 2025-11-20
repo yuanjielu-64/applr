@@ -46,10 +46,10 @@ class DWAParamContinuous(DWABase):
             dtype=np.float32
         )
 
-    def _get_info(self):
-        info = dict(success=self._get_success(), params=self.params)
-        info.update(super()._get_info())
-        return info
+    # def _get_info(self):
+    #     info = dict(success=self._get_success(), params=self.params)
+    #     info.update(super()._get_info())
+    #     return info
 
     def _take_action(self, action):
 

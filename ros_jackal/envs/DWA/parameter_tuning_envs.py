@@ -40,10 +40,10 @@ class DWAParamContinuous(DWABase):
             dtype=np.float32
         )
 
-    def _get_info(self):
-        info = dict(success=self._get_success(), params=self.params)
-        info.update(super()._get_info())
-        return info
+    # def _get_info(self):
+    #     info = dict(success=self._get_success(), params=self.params)
+    #     info.update(super()._get_info())
+    #     return info
 
     def _take_action(self, action):
 
@@ -60,6 +60,7 @@ class DWAParamContinuous(DWABase):
         rospy.sleep(self.time_step)
         self.gazebo_sim.pause()
 
+        self.jackal_ros.last_action = action
 
 class DWAParamContinuousLaser(DWAParamContinuous, DWABaseLaser):
     def __init__(self, **kwargs):

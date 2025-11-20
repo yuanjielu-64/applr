@@ -74,7 +74,7 @@ class InfoEnv:
 
         elif env_id.startswith("mppi_param-v0"):
 
-            self.param_init = np.array([1.5, 2, 600, 20, 0.1, 0.05, 1,  0.25])
+            self.param_init = np.array([1.5, 2, 600, 20, 0.1, 0.05, 1, 2 , 0.25])
 
             self.action_space = Box(
                 low=np.array([mppi_equation[k][0] for k in env_config["kwargs"]["param_list"]]),

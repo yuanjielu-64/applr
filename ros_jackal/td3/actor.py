@@ -153,7 +153,7 @@ class FileSync:
 
             info_dict = traj[-1][4]
 
-            if (info_dict['recovery'] == 1.0 and info_dict['success'] == True) or (info_dict['time'] >= 70):
+            if (info_dict['recovery'] == 1.0 and info_dict['status'] == 'timeout') or (info_dict['time'] >= 70):
                 error_dir = os.path.join(BUFFER_PATH, 'actor_error')
                 os.makedirs(error_dir, exist_ok=True)
 
@@ -161,14 +161,14 @@ class FileSync:
 
                 with open(error_file, 'a') as f:
                     f.write(
-                        f"Environment {id} and World_name {info_dict['world']} has KeyError in info_dict, time: {info_dict['time']}, recovery: {info_dict['recovery']}, status: {info_dict['success']}\n")
+                        f"Environment {id} and World_name {info_dict['world']} has KeyError in info_dict, time: {info_dict['time']}, recovery: {info_dict['recovery']}, status: {info_dict['status']}\n")
 
                 return
 
             with open(join(path, "trajectory_results.txt"), 'a') as f:
 
                 f.write(
-                    f"Train: Collision: {info_dict['collision']}, Recovery: {info_dict['recovery']:.6f}, Smoothness: {info_dict['smoothness']:.6f}, Status: {info_dict['success']}, Time: {info_dict['time']:.3f} , Reward: {total_reward:.3f}, Opt_time: {opt_time:.3f} , Nav_Metric: {nav_metric:.3f} , World: {info_dict['world']}\n")
+                    f"Train: Collision: {info_dict['collision']}, Recovery: {info_dict['recovery']:.6f}, Smoothness: {info_dict['smoothness']:.6f}, Status: {info_dict['status']}, Time: {info_dict['time']:.3f} , Reward: {total_reward:.3f}, Opt_time: {opt_time:.3f} , Nav_Metric: {nav_metric:.3f} , World: {info_dict['world']}\n")
 
             with open(join(path, 'traj_%d.pickle' % (ep)), 'wb') as f:
                 try:
@@ -180,7 +180,7 @@ class FileSync:
 
             info_dict = traj[-1][4]
 
-            if (info_dict['recovery'] == 1.0 and info_dict['success'] == True) or (info_dict['time'] >= 70):
+            if (info_dict['recovery'] == 1.0 and info_dict['status'] == 'timeout') or (info_dict['time'] >= 70):
                 error_dir = os.path.join(BUFFER_PATH, 'actor_error')
                 os.makedirs(error_dir, exist_ok=True)
 
@@ -188,7 +188,7 @@ class FileSync:
 
                 with open(error_file, 'a') as f:
                     f.write(
-                        f"Test environment {id} has KeyError in info_dict, time: {info_dict['time']}, recovery: {info_dict['recovery']}, status: {info_dict['success']}\n")
+                        f"Test environment {id} has KeyError in info_dict, time: {info_dict['time']}, recovery: {info_dict['recovery']}, status: {info_dict['status']}\n")
 
                 return
 
@@ -200,7 +200,7 @@ class FileSync:
             with open(join(self.actor_dir, "trajectory_results.txt"), 'a') as f:
 
                 f.write(
-                    f"Test: Collision: {info_dict['collision']}, Recovery: {info_dict['recovery']:.6f}, Smoothness: {info_dict['smoothness']:.6f}, Status: {info_dict['success']}, Time: {info_dict['time']:.3f} , Reward: {total_reward:.3f}, Opt_time: {opt_time:.3f} , Nav_Metric: {nav_metric:.3f} , World: {info_dict['world']}\n")
+                    f"Test: Collision: {info_dict['collision']}, Recovery: {info_dict['recovery']:.6f}, Smoothness: {info_dict['smoothness']:.6f}, Status: {info_dict['status']}, Time: {info_dict['time']:.3f} , Reward: {total_reward:.3f}, Opt_time: {opt_time:.3f} , Nav_Metric: {nav_metric:.3f} , World: {info_dict['world']}\n")
 
             with open(join(path, 'test_%d_%d.pickle' % (id, ep)), 'wb') as f:
                 try:
@@ -259,7 +259,7 @@ def path_coord_to_gazebo_coord(x, y):
 
 def get_score(INIT_POSITION, GOAL_POSITION, status, time, world):
 
-    if status == True:
+    if status == "success":
         success = True
     else:
         success = False
@@ -351,7 +351,7 @@ def main(id):
 
         if flag == True:
             info_dict = traj[-1][4]
-            opt_time, nav_metric = get_score(init_pos, goal_pos, info_dict['success'], info_dict['time'], info_dict['world'])
+            opt_time, nav_metric = get_score(init_pos, goal_pos, info_dict['status'], info_dict['time'], info_dict['world'])
 
             traj[-1][5] = opt_time
             traj[-1][6] = nav_metric
@@ -367,7 +367,7 @@ def main(id):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description = 'start an actor')
     parser.add_argument('--id', dest='actor_id', type = int, default = 0)
-    parser.add_argument('--policy_name', dest='policy_name', default="mppi_cluster")
+    parser.add_argument('--policy_name', dest='policy_name', default="teb_cluster")
     parser.add_argument('--buffer_path', dest='buffer_path', default="../buffer/")
     parser.add_argument('--world_path', dest='world_path', default="../jackal_helper/worlds/BARN/")
 

@@ -66,3 +66,5 @@ class Parameters(JackalBase):
         rospy.sleep(self.time_step)
         self.gazebo_sim.pause()
 
+        self.jackal_ros.last_action = action
+

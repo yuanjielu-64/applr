@@ -21,12 +21,12 @@ env_config:
     gui: false
     rviz_gui: true
     verbose: false
-    max_step: 100
-    time_step: 1
+    max_step: 200
+    time_step: 0.5
     slack_reward: 0
-    failure_reward: 0
-    success_reward: 20
-    collision_reward: 0
+    failure_reward: -100
+    success_reward: 50
+    collision_reward: -1
     init_position: [-2, 3, 1.57]
     goal_position: [0, 10, 0]
 

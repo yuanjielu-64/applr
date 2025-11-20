@@ -151,15 +151,16 @@ class JackalBase(gym.Env):
         """
         self.step_count = 0
 
-        self.gazebo_sim.unpause()
         self.gazebo_sim.reset()
+        self.jackal_ros.reset(self.param_init)
+
+        self.gazebo_sim.unpause()
         self._reset_move_base()
-
         self.jackal_ros.set_params(self.param_init)
-
-        self.start_time = rospy.get_time()
         obs = self._get_observation()
         self.gazebo_sim.pause()
+
+        self._reset_reward()
 
         self.collision_count = 0
         self.traj_pos = []
@@ -174,11 +175,14 @@ class JackalBase(gym.Env):
 
         self._take_action(action)
         self.step_count += 1
+
         self.gazebo_sim.unpause()
         obs = self._get_observation()
+        self.gazebo_sim.pause()
+
         rew = self._get_reward()
-        done = self._get_done()
-        info = self._get_info()
+        done, status = self._get_done()
+        info = self._get_info(status)
         self.gazebo_sim.pause()
         pos = self.gazebo_sim.get_model_state().pose.position
         self.traj_pos.append((pos.x, pos.y))
@@ -196,77 +200,59 @@ class JackalBase(gym.Env):
             self.global_goal
         )
 
-    # def _get_reward(self, new_pos, action):
-
-        # if self.jackal_ros.get_collision():
-        #     return self.failure_reward
-        # elif self.step_count >= self.max_step:
-        #     return self.failure_reward
-        # elif self._get_success():
-        #     return self.success_reward
-        # else:
-        #     rewards = self.slack_reward
-        #
-        # Y = new_pos[1]
-        #
-        # distance_progress = Y - self.Y
-        #
-        # rewards += distance_progress * 10
-        #
-        # self.Y = new_pos[1]
-
-        # last_pos = self.last_robot_pos
-        # last_local_goal = np.array(self.last_local_goal)
-        #
-        # last_distance = self._compute_distance(
-        #     [last_pos[0], last_pos[1]],
-        #     last_local_goal
-        # )
-        #
-        # current_distance = self._compute_distance(
-        #     [new_pos[0], new_pos[1]],
-        #     last_local_goal
-        # )
-        #
-        # distance_progress = last_distance - current_distance
-        # rewards += distance_progress * 20
-
-        # total_sum = np.sum(action)
-        #
-        # if total_sum > 2.0:
-        #     rewards += (total_sum - 2.0) * -15
-        #
-        # if total_sum < 1.0:
-        #     rewards += (2.0 - total_sum) * -15
-        #
-        # self.last_robot_pos = new_pos
-        # self.last_local_goal = self.jackal_ros.get_local_goal()
-        #
-        # return rewards
-
     def _get_reward(self):
-        rew = self.slack_reward
+
+        if self.jackal_ros.get_collision():
+            return self.failure_reward
         if self.step_count >= self.max_step:  # or self._get_flip_status():
-            rew = self.failure_reward
+            return self.failure_reward
+
         if self._get_success():
-            rew = self.success_reward
-        laser_scan = np.array(self.move_base.get_laser_scan().ranges)
+            return self.success_reward
+        else:
+            rew = self.slack_reward
+
+        laser_scan = np.array(self.jackal_ros.laser_data.ranges)
         d = np.mean(sorted(laser_scan)[:10])
-        if d < 0.3:  # minimum distance 0.3 meter
-            rew += self.collision_reward / (d + 0.05)
+        if d < 0.05:
+            penalty_ratio = (1 - d / 0.05) ** 2
+            rew += self.collision_reward * penalty_ratio
+
+        robot_pos = self.jackal_ros.get_robot_state()
+        current_distance = self._compute_distance(
+            [robot_pos[0], robot_pos[1]],
+            self.global_goal
+        )
+
+        distance_progress = self.last_distance - current_distance
+        rew += distance_progress * 10
+        self.last_distance = current_distance
+
         smoothness = self._compute_angle(len(self.traj_pos) - 1)
-        # rew += self.smoothness_reward * smoothness
         self.smoothness += smoothness
+
         return rew
 
     def _get_done(self):
         success = self._get_success()
-        done = success or self.step_count >= self.max_step or self._get_flip_status()
-        return done
+        flip = self._get_flip_status()
+        timeout = self.step_count >= self.max_step
+        abort = self.jackal_ros.should_abort
+
+        if abort == True:
+            return True, "collision"
+
+        if success:
+            return True, "success"
+        elif flip:
+            return True, "flip"
+        elif timeout:
+            return True, "timeout"
+        else:
+            return False, "running"
 
     def _get_success(self):
-        robot_position = np.array([self.move_base.robot_config.X,
-                                   self.move_base.robot_config.Y])
+        robot_position = [self.jackal_ros.get_robot_state()[0], self.jackal_ros.get_robot_state()[1]]
 
         if robot_position[1] > self.goal_position[1]:
             return True
@@ -281,21 +267,17 @@ class JackalBase(gym.Env):
 
         return False
 
-    def _get_info(self):
-        bn, nn = self.move_base.get_bad_vel_num()
+    def _get_info(self, status):
+        bn, nn = self.jackal_ros.get_bad_vel()
 
-        if nn == 0:
-            r = 0.0
-        else:
-            r = 1.0 * bn / nn
+        self.collision_count += self.jackal_ros.get_collision()
 
-        self.collision_count += self.move_base.get_collision()
         return dict(
             world=self.world_name,
-            time=rospy.get_time() - self.start_time,
-            success=self._get_success(),
+            time=rospy.get_time() - self.jackal_ros.start_time,
             collision=self.collision_count,
-            recovery=r,
+            status=status,
+            recovery= 1.0 * (bn + 0.0001) / (nn + 0.0001),
             smoothness=self.smoothness
         )
 

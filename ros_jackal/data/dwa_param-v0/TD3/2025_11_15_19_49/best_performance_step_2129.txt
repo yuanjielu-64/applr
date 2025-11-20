@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 2129:
+Training Step: 3155
+Episode Reward: 26.989
+Episode Length: 46.971
+Success Rate: 0.000%

@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 1070:
+Training Step: 2129
+Episode Reward: 28.639
+Episode Length: 57.250
+Success Rate: 0.000%

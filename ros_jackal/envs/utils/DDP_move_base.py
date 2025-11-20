@@ -7,6 +7,7 @@ try:  # make sure to create a fake environment without ros installed
     import dynamic_reconfigure.client
     from robot_localization.srv import SetPose
     from std_srvs.srv import Empty
+    from std_msgs.msg import Bool
     from geometry_msgs.msg import Quaternion, Pose, PoseWithCovarianceStamped, Twist, PoseStamped
     from move_base_msgs.msg import MoveBaseGoal, MoveBaseAction
     from nav_msgs.msg import OccupancyGrid, Path, Odometry
@@ -260,4 +261,5 @@ class ddp_MoveBase():
             laser_scan = self.get_laser_scan().ranges
             self.laser_scan = None
         d = np.mean(sorted(laser_scan)[:5])
-        return d < 0.3
+
+        return d < 0.01

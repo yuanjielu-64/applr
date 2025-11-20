@@ -532,8 +532,8 @@ namespace Antipatrea {
         global_goal = robot.getGlobalGoalCfg();
         local_goal = robot.getLocalGoalCfg();
 
-        distance = 0.1;
-        robot_radius_ = 0.1;
+        distance = 0.01;
+        robot_radius_ = 0.01;
 
         use_goal_cost_ = true;
         use_angular_cost_ = true;
@@ -562,8 +562,8 @@ namespace Antipatrea {
         global_goal = robot.getGlobalGoalCfg();
         local_goal = robot.getLocalGoalCfg();
 
-        distance = 0.1;
-        robot_radius_ = 0.1;
+        distance = 0.01;
+        robot_radius_ = 0.01;
 
         use_goal_cost_ = true;
         use_angular_cost_ = true;

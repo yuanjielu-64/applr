@@ -37,10 +37,14 @@ class JackalRos:
         self.bad_vel = 0
         self.vel_counter = 0
 
+        self.last_collision_time = None
+        self.max_collision_duration = 2
         self.is_colliding = False
-        self.collision_count = 0
         self.collision_start_time = None
+        self.last_collision_end_time = None
+        self.collision_count = 0
         self.last_collision_duration = None
+        self.should_abort = False
 
         self._setup_subscribers()
         self._setup_publisher()
@@ -70,21 +74,29 @@ class JackalRos:
         self._params_pub = rospy.Publisher('/params', Float64MultiArray, queue_size=1)
 
     def _collision_callback(self, msg):
-
         current_time = rospy.get_time()
 
         if msg.data:
+            self.last_collision_time = current_time
+
             if not self.is_colliding:
-                self.collision_count += 1
-                self.collision_start_time = current_time
                 self.is_colliding = True
+                self.collision_start_time = current_time
+                self.collision_count += 1
 
-        else:
-            if self.is_colliding:
-                duration = current_time - self.collision_start_time
-                self.last_collision_duration = duration
+        if self.is_colliding and self.last_collision_time is not None:
+            time_since_last = current_time - self.last_collision_time
+            if time_since_last > 0.25:
+                print(time_since_last)
                 self.is_colliding = False
+                self.last_collision_duration = current_time - self.collision_start_time
+                self.collision_start_time = None
 
+        if self.is_colliding and self.collision_start_time is not None:
+            duration = current_time - self.collision_start_time
+            if duration >= self.max_collision_duration:
+                self.should_abort = True
+                self.last_collision_duration = duration
 
     def _laser_callback(self, msg):
         self.laser_data = msg
@@ -189,11 +201,16 @@ class JackalRos:
 
     def reset(self, init_params):
         self.is_colliding = False
-        self.collision_count = 0
         self.collision_start_time = None
+        self.last_collision_end_time = None
+        self.collision_count = 0
         self.last_collision_duration = None
+        self.should_abort = False
+        self.last_collision_time = None
+
         self.bad_vel = 0
         self.vel_counter = 0
         self.start = False
         self.start_time = 0
         self.last_action = init_params
+
