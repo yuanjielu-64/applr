@@ -367,9 +367,9 @@ def main(id):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description = 'start an actor')
     parser.add_argument('--id', dest='actor_id', type = int, default = 0)
-    parser.add_argument('--policy_name', dest='policy_name', default="teb_cluster")
+    parser.add_argument('--policy_name', dest='policy_name', default="ddp_cluster")
     parser.add_argument('--buffer_path', dest='buffer_path', default="../buffer/")
-    parser.add_argument('--world_path', dest='world_path', default="../jackal_helper/worlds/BARN/")
+    parser.add_argument('--world_path', dest='world_path', default="../jackal_helper/worlds/BARN1/")
 
     args = parser.parse_args()
     BUFFER_PATH = args.buffer_path

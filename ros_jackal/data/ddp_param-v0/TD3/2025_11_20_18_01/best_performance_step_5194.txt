@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 5194:
+Training Step: 6226
+Episode Reward: 57.777
+Episode Length: 26.250
+Success Rate: 75.000%

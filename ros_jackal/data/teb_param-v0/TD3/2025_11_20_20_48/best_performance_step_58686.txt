@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 58686:
+Training Step: 59723
+Episode Reward: 148.317
+Episode Length: 11.288
+Success Rate: 100.000%

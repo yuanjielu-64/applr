@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 42225:
+Training Step: 43250
+Episode Reward: 148.625
+Episode Length: 11.152
+Success Rate: 99.667%

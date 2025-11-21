@@ -19,14 +19,13 @@ RANGE_DICT = {
     "linear_stddev": [0.05, 0.15],
     "angular_stddev": [0.02, 0.15],
     "lambda": [0.5, 5],
-    "local_goal_distance": [0.5, 5],
     "inflation_radius": [0.1, 0.6],
 }
 
 class Parameters(JackalBase):
     def __init__(
             self,
-            param_init=[1.5, 2, 600, 20, 0.1, 0.05, 1, 2 , 0.25],
+            param_init=[1.5, 2, 600, 20, 0.1, 0.05, 1, 0.25],
             param_list=["max_vel_x",
                         "max_vel_theta",
                         "nr_pairs_",
@@ -34,7 +33,6 @@ class Parameters(JackalBase):
                         "linear_stddev",
                         "angular_stddev",
                         "lambda",
-                        "local_goal_distance",
                         "inflation_radius"],
             **kwargs
     ):

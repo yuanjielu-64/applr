@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 24959:
+Training Step: 26009
+Episode Reward: 143.667
+Episode Length: 26.387
+Success Rate: 98.333%

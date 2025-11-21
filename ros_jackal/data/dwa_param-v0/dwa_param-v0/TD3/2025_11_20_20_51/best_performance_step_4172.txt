@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 4172:
+Training Step: 5200
+Episode Reward: 148.666
+Episode Length: 26.474
+Success Rate: 98.444%

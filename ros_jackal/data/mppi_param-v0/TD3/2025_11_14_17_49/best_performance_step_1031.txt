@@ -1,5 +1,0 @@
-Best Performance at TensorBoard Step 1031:
-Training Step: 2058
-Episode Reward: 31.432
-Episode Length: 20.545
-Success Rate: 0.000%

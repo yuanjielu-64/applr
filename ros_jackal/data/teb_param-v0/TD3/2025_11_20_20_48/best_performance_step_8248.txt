@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 8248:
+Training Step: 9272
+Episode Reward: 147.738
+Episode Length: 13.285
+Success Rate: 99.667%

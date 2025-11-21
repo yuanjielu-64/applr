@@ -1,5 +1,0 @@
-Best Performance at TensorBoard Step 3123:
-Training Step: 4159
-Episode Reward: 30.205
-Episode Length: 11.292
-Success Rate: 0.000%

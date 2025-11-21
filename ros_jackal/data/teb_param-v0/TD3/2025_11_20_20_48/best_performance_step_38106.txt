@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 38106:
+Training Step: 39143
+Episode Reward: 149.636
+Episode Length: 12.450
+Success Rate: 100.000%

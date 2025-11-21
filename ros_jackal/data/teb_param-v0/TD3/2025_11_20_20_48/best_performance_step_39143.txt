@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 39143:
+Training Step: 40172
+Episode Reward: 148.324
+Episode Length: 11.566
+Success Rate: 99.667%

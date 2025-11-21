@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 68990:
+Training Step: 70023
+Episode Reward: 148.168
+Episode Length: 11.630
+Success Rate: 99.667%

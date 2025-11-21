@@ -54,15 +54,17 @@ namespace Antipatrea {
     void DDP::lowSpeedParameters(Robot_config &robot) {
         v_steps_ = 20;
         w_steps_ = 20;
-        nr_steps_ = (int) robot.timeInterval.size();
-        //nr_pairs_ = 550;
-        nr_pairs_ = 800;
+        nr_steps_ = 20;
+
+        nr_pairs_ = (int) robot.nr_pairs_;
+        linear_stddev = robot.linear_stddev;
+        angular_stddev = robot.angular_stddev;
 
         global_goal = robot.getGlobalGoalCfg();
         local_goal = robot.getLocalGoalCfg();
 
-        distance = 0.1;
-        robot_radius_ = 0.03;
+        distance = robot.distance;
+        robot_radius_ = robot.robot_radius_;
 
         use_goal_cost_ = true;
         use_angular_cost_ = false;

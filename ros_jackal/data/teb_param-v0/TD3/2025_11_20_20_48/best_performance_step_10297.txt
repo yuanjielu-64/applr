@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 10297:
+Training Step: 11327
+Episode Reward: 146.583
+Episode Length: 13.174
+Success Rate: 99.333%

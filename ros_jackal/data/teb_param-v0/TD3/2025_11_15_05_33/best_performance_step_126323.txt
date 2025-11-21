@@ -1,5 +1,0 @@
-Best Performance at TensorBoard Step 126323:
-Training Step: 127351
-Episode Reward: 29.054
-Episode Length: 6.895
-Success Rate: 0.000%

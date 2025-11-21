@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 2111:
+Training Step: 3147
+Episode Reward: 146.917
+Episode Length: 27.523
+Success Rate: 97.345%

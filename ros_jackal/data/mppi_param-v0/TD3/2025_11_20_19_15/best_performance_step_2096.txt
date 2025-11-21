@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 2096:
+Training Step: 3145
+Episode Reward: 43.375
+Episode Length: 35.811
+Success Rate: 70.787%

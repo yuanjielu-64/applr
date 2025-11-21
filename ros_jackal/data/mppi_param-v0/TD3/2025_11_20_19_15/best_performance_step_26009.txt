@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 26009:
+Training Step: 27034
+Episode Reward: 141.629
+Episode Length: 26.084
+Success Rate: 97.667%

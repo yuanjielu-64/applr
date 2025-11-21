@@ -1,5 +1,0 @@
-Best Performance at TensorBoard Step 176636:
-Training Step: 177660
-Episode Reward: 29.753
-Episode Length: 6.995
-Success Rate: 0.000%

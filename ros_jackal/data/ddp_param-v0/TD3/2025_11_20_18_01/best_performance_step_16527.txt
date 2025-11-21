@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 16527:
+Training Step: 17559
+Episode Reward: 144.465
+Episode Length: 22.184
+Success Rate: 98.333%

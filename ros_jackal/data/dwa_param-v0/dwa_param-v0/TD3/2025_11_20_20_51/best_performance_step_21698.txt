@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 21698:
+Training Step: 22734
+Episode Reward: 148.288
+Episode Length: 24.476
+Success Rate: 99.333%

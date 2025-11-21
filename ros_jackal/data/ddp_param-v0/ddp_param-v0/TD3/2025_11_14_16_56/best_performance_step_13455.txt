@@ -1,5 +1,0 @@
-Best Performance at TensorBoard Step 13455:
-Training Step: 14508
-Episode Reward: 33.754
-Episode Length: 9.400
-Success Rate: 0.000%

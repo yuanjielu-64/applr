@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 39265:
+Training Step: 40304
+Episode Reward: 150.718
+Episode Length: 22.898
+Success Rate: 99.667%

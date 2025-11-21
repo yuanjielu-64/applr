@@ -1,5 +1,0 @@
-Best Performance at TensorBoard Step 14459:
-Training Step: 15493
-Episode Reward: 38.554
-Episode Length: 16.265
-Success Rate: 0.000%

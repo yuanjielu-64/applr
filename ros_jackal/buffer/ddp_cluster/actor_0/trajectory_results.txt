@@ -1,2 +1,0 @@
-Train: Collision: 0, Recovery: 0.000000, Smoothness: -1.650265, Status: success, Time: 12.310 , Reward: 127.294, Opt_time: 5.809 , Nav_Metric: 0.472 , World: world_298.world
-Train: Collision: 0, Recovery: 0.000000, Smoothness: -1.841833, Status: success, Time: 12.593 , Reward: 133.348, Opt_time: 5.809 , Nav_Metric: 0.461 , World: world_298.world

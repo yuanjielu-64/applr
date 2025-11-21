@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 12412:
+Training Step: 13439
+Episode Reward: 140.586
+Episode Length: 22.627
+Success Rate: 97.667%

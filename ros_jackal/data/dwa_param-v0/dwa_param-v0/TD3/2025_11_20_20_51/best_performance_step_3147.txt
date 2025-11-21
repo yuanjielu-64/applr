@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 3147:
+Training Step: 4172
+Episode Reward: 147.375
+Episode Length: 26.856
+Success Rate: 97.802%

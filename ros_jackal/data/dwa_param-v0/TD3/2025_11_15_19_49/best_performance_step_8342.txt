@@ -1,5 +1,0 @@
-Best Performance at TensorBoard Step 8342:
-Training Step: 9376
-Episode Reward: 26.494
-Episode Length: 35.880
-Success Rate: 0.000%

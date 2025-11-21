@@ -15,7 +15,6 @@ RANGE_DICT = {
     'max_vel_x': [0.0, 2],
     "max_vel_theta": [0.314, 3.14],
     "nr_pairs_": [400, 800],
-    "dist_local_goal": [1, 6],
     "distance": [0.01, 0.4],
     "robot_radius": [0.01, 0.15],
     "inflation_radius": [0.1, 0.6],
@@ -24,11 +23,10 @@ RANGE_DICT = {
 class Parameters(JackalBase):
     def __init__(
             self,
-            param_init=[1.5, 3, 600, 4, 0.1, 0.02, 0.25],
+            param_init=[1.5, 3, 600, 0.1, 0.02, 0.25],
             param_list=["max_vel_x",
                  "max_vel_theta",
                  "nr_pairs_",
-                 "dist_local_goal",
                  "distance",
                  "robot_radius",
                  "inflation_radius"],

@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 1038:
+Training Step: 2095
+Episode Reward: -86.137
+Episode Length: 31.355
+Success Rate: 41.176%

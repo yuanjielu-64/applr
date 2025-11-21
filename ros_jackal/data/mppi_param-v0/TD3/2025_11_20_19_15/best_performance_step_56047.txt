@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 56047:
+Training Step: 57078
+Episode Reward: 144.611
+Episode Length: 28.072
+Success Rate: 98.000%

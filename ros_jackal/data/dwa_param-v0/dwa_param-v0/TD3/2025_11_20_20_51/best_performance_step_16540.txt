@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 16540:
+Training Step: 17571
+Episode Reward: 148.271
+Episode Length: 24.376
+Success Rate: 99.000%

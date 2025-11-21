@@ -1,5 +1,0 @@
-Best Performance at TensorBoard Step 10329:
-Training Step: 11354
-Episode Reward: 29.525
-Episode Length: 7.571
-Success Rate: 0.000%

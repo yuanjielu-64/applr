@@ -1,5 +1,0 @@
-Best Performance at TensorBoard Step 9304:
-Training Step: 10329
-Episode Reward: 29.139
-Episode Length: 8.266
-Success Rate: 0.000%

@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 9272:
+Training Step: 10297
+Episode Reward: 147.527
+Episode Length: 13.218
+Success Rate: 99.667%

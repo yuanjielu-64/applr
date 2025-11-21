@@ -1,5 +1,0 @@
-Best Performance at TensorBoard Step 13403:
-Training Step: 14431
-Episode Reward: 29.353
-Episode Length: 6.995
-Success Rate: 0.000%

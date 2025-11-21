@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 23749:
+Training Step: 24776
+Episode Reward: 128.442
+Episode Length: 19.481
+Success Rate: 94.667%

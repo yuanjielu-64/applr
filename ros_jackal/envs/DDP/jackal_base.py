@@ -252,6 +252,7 @@ class JackalBase(gym.Env):
         else:
             return False, "running"
 
+
     def _get_success(self):
         robot_position = [self.jackal_ros.get_robot_state()[0], self.jackal_ros.get_robot_state()[1]]
 

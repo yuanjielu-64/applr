@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 7255:
+Training Step: 8285
+Episode Reward: 140.353
+Episode Length: 24.483
+Success Rate: 97.667%

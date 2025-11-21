@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 57078:
+Training Step: 58108
+Episode Reward: 144.400
+Episode Length: 25.137
+Success Rate: 98.000%

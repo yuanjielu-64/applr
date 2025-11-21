@@ -1,5 +1,0 @@
-Best Performance at TensorBoard Step 3082:
-Training Step: 4106
-Episode Reward: 35.859
-Episode Length: 17.190
-Success Rate: 0.000%

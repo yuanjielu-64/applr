@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 4153:
+Training Step: 5194
+Episode Reward: -14.365
+Episode Length: 25.397
+Success Rate: 57.000%

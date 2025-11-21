@@ -1,5 +1,0 @@
-Best Performance at TensorBoard Step 11348:
-Training Step: 12385
-Episode Reward: 38.229
-Episode Length: 16.447
-Success Rate: 0.000%

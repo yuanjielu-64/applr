@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 16664:
+Training Step: 17695
+Episode Reward: 133.832
+Episode Length: 34.694
+Success Rate: 95.667%

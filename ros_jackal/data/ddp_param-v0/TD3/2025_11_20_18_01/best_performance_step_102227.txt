@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 102227:
+Training Step: 103251
+Episode Reward: 147.913
+Episode Length: 20.039
+Success Rate: 99.000%

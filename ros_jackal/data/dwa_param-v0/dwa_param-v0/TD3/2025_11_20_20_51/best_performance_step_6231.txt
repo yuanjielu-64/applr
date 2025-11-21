@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 6231:
+Training Step: 7260
+Episode Reward: 149.495
+Episode Length: 25.000
+Success Rate: 99.333%

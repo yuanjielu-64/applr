@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 10353:
+Training Step: 11379
+Episode Reward: 147.787
+Episode Length: 21.908
+Success Rate: 99.000%

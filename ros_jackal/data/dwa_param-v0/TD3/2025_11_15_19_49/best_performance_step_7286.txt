@@ -1,5 +1,0 @@
-Best Performance at TensorBoard Step 7286:
-Training Step: 8342
-Episode Reward: 26.618
-Episode Length: 43.625
-Success Rate: 0.000%

@@ -1,5 +1,0 @@
-Best Performance at TensorBoard Step 2058:
-Training Step: 3082
-Episode Reward: 34.370
-Episode Length: 17.545
-Success Rate: 0.000%

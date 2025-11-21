@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 10422:
+Training Step: 11459
+Episode Reward: 128.665
+Episode Length: 33.953
+Success Rate: 95.333%

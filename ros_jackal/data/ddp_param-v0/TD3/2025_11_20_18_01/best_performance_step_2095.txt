@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 2095:
+Training Step: 3121
+Episode Reward: -94.064
+Episode Length: 13.074
+Success Rate: 38.400%

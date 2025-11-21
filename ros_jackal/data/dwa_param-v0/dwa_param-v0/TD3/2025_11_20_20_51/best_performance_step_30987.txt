@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 30987:
+Training Step: 32028
+Episode Reward: 150.463
+Episode Length: 21.942
+Success Rate: 99.333%

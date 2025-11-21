@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 81352:
+Training Step: 82386
+Episode Reward: 149.427
+Episode Length: 11.473
+Success Rate: 100.000%

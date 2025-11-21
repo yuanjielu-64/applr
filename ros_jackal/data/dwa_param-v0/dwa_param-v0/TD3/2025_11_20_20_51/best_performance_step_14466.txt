@@ -1,0 +1,5 @@
+Best Performance at TensorBoard Step 14466:
+Training Step: 15508
+Episode Reward: 149.361
+Episode Length: 24.367
+Success Rate: 99.000%

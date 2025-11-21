@@ -241,8 +241,6 @@ void Robot_config::globalPathCallback(const nav_msgs::Path::ConstPtr &msg) {
     bool flag = false;
     double thresholdSq = 0;
 
-    thresholdSq = local_goal_distance;
-
     double length = 0;
 
     for (size_t i = 1; i < xhat.size(); ++i) {
@@ -251,13 +249,67 @@ void Robot_config::globalPathCallback(const nav_msgs::Path::ConstPtr &msg) {
 
         length += dist;
 
-        if (length >= thresholdSq && flag == false) {
-            lg = transform_lg(xhat[i], yhat[i], robot_state.x_, robot_state.y_, robot_state.theta_);
-            setLocalGoal(lg, xhat[i], yhat[i]);
-            flag = true;
-            break;
-        }
+        if (getAlgorithm() == DWA || getAlgorithm() == DDPDWA) {
+            // v = initial_v;
+            thresholdSq = 2 * v + 1;
 
+            if (length >= thresholdSq && flag == false) {
+                lg = transform_lg(xhat[i], yhat[i], robot_state.x_, robot_state.y_, robot_state.theta_);
+                setLocalGoal(lg, xhat[i], yhat[i]);
+                flag = true;
+                break;
+            }
+        } else if (getAlgorithm() == LuPlanner || getAlgorithm() == DDPLuPlanner) {
+            // v = initial_v;
+            thresholdSq = 1.5 * v;
+
+            if (length >= thresholdSq && flag == false) {
+                lg = transform_lg(xhat[i], yhat[i], robot_state.x_, robot_state.y_, robot_state.theta_);
+                setLocalGoal(lg, xhat[i], yhat[i]);
+                flag = true;
+                break;
+            }
+        } else {
+            if (getRobotState() == NORMAL_PLANNING) {
+                thresholdSq = 2 * v + 1;
+                if (length >= thresholdSq && flag == false) {
+                    lg = transform_lg(xhat[i], yhat[i], robot_state.x_, robot_state.y_, robot_state.theta_);
+                    setLocalGoal(lg, xhat[i], yhat[i]);
+                    flag = true;
+                    break;
+                }
+            } else if (getRobotState() == LOW_SPEED_PLANNING) {
+
+                thresholdSq = 1 * v + 1;
+
+                if (length >= thresholdSq && flag == false) {
+                    lg = transform_lg(xhat[i], yhat[i], robot_state.x_, robot_state.y_, robot_state.theta_);
+                    setLocalGoal(lg, xhat[i], yhat[i]);
+                    flag = true;
+                    break;
+                }
+
+            } else if (getRobotState() == NO_MAP_PLANNING){
+                v = 2;
+                thresholdSq = v;
+                if (length >= thresholdSq && flag == false) {
+                    lg = transform_lg(xhat[i], yhat[i], robot_state.x_, robot_state.y_, robot_state.theta_);
+                    setLocalGoal(lg, xhat[i], yhat[i]);
+                    flag = true;
+                    break;
+                }
+            }else {
+                //v = initial_v / 2;
+                v = 0.8;
+                thresholdSq = v;
+                if (length >= thresholdSq && flag == false) {
+                    lg = transform_lg(xhat[i], yhat[i], robot_state.x_, robot_state.y_, robot_state.theta_);
+                    setLocalGoal(lg, xhat[i], yhat[i]);
+                    flag = true;
+                    break;
+                }
+            }
+        }
     }
 
     if (!flag) {
@@ -383,7 +435,6 @@ void Robot_config::paramsCallback(const std_msgs::Float64MultiArray::ConstPtr& m
         linear_stddev = msg->data[4];
         angular_stddev = msg->data[5];
         lambda = msg->data[6];
-        local_goal_distance = msg->data[7];
 
     }
 
@@ -397,9 +448,8 @@ void Robot_config::paramsCallback(const std_msgs::Float64MultiArray::ConstPtr& m
         v = msg->data[0];
         w = msg->data[1];
         nr_pairs_ = msg->data[2];
-        local_goal_distance = msg->data[3];
-        distance = msg->data[4];
-        robot_radius_ = msg->data[5];
+        distance = msg->data[3];
+        robot_radius_ = msg->data[4];
 
     }
 
@@ -418,74 +468,74 @@ void Robot_config::goalCallback(const move_base_msgs::MoveBaseActionGoal::ConstP
 }
 
 void Robot_config::velocityCallback(const nav_msgs::Odometry::ConstPtr &msg) {
-    // if (getAlgorithm() == DWA || getAlgorithm() == DDPDWA || getAlgorithm() == LuPlanner || getAlgorithm() == DDPLuPlanner)
-    //     return;
-    //
-    // double linear_speed = fabs(msg->twist.twist.linear.x);
-    //
-    // double LOW_SPEED_THRESHOLD = v * 0.8 + 0.05;
-    // double LOW_SPEED_HYSTERESIS = 0.05;
-    // double HIGH_SPEED_THRESHOLD = v * 0.5 + 0.1;
-    // double BRAKE_WAIT_TIME = 0.5;
-    //
-    // if (getRobotState() == NORMAL_PLANNING) {
-    //     re = 1;
-    //     low_to_normal_active = false;
-    //     low_to_brake_active = false;
-    //
-    //     is_stopped = false;
-    //
-    //     if (linear_speed < HIGH_SPEED_THRESHOLD) {
-    //         if (!normal_to_low_active) {
-    //             normal_to_low_time = ros::Time::now();
-    //             normal_to_low_active = true;
-    //         }else if ((ros::Time::now() - normal_to_low_time).toSec() >= 0.5) {
-    //             ROS_INFO("The robot is back to LOW_SPEED_PLANNING after 0.5s in high speed.");
-    //             setRobotState(LOW_SPEED_PLANNING);
-    //
-    //             normal_to_low_active = false;
-    //         }
-    //     }else {
-    //         normal_to_low_active = false;
-    //     }
-    // }else if (getRobotState() == LOW_SPEED_PLANNING) {
-    //
-    //     normal_to_low_active = false;
-    //
-    //     if (linear_speed >= LOW_SPEED_THRESHOLD + LOW_SPEED_HYSTERESIS) {
-    //         if (!low_to_normal_active) {
-    //              low_to_normal_time = ros::Time::now();
-    //             low_to_normal_active = true;
-    //         } else if ((ros::Time::now() -  low_to_normal_time).toSec() >= 0.5) {
-    //             ROS_INFO("The robot is back to NORMAL_PLANNING after 0.5s in low speed.");
-    //             setRobotState(NORMAL_PLANNING);
-    //             low_to_normal_active = false;
-    //         }
-    //     } else {
-    //         low_to_normal_active = false;
-    //     }
-    //
-    //     if (linear_speed < MIN_SPEED) {
-    //         if (!low_to_brake_active) {
-    //             low_to_brake_time = ros::Time::now();
-    //             low_to_brake_active = true;
-    //         } else if ((ros::Time::now() - low_to_brake_time).toSec() > BRAKE_WAIT_TIME * STOPPED_TIME_THRESHOLD) {
-    //             ROS_INFO("The robot needs to brake after 1 second in low speed");
-    //             setRobotState(BRAKE_PLANNING);
-    //             low_to_brake_active = false;
-    //         }
-    //     } else {
-    //         low_to_brake_active = false;
-    //     }
-    //
-    // } else {  // recover
-    //     normal_to_low_active = false;
-    //     low_to_normal_active = false;
-    //     low_to_brake_active = false;
-    //
-    //     if (re >= 5)
-    //         re = 4;
-    // }
+     if (getAlgorithm() == DWA || getAlgorithm() == DDPDWA || getAlgorithm() == LuPlanner || getAlgorithm() == DDPLuPlanner)
+         return;
+
+     double linear_speed = fabs(msg->twist.twist.linear.x);
+
+     double LOW_SPEED_THRESHOLD = v * 0.8 + 0.05;
+     double LOW_SPEED_HYSTERESIS = 0.05;
+     double HIGH_SPEED_THRESHOLD = v * 0.5 + 0.1;
+     double BRAKE_WAIT_TIME = 0.5;
+
+     if (getRobotState() == NORMAL_PLANNING) {
+         re = 1;
+         low_to_normal_active = false;
+         low_to_brake_active = false;
+
+         is_stopped = false;
+
+         if (linear_speed < HIGH_SPEED_THRESHOLD) {
+             if (!normal_to_low_active) {
+                 normal_to_low_time = ros::Time::now();
+                 normal_to_low_active = true;
+             }else if ((ros::Time::now() - normal_to_low_time).toSec() >= 0.5) {
+                 ROS_INFO("The robot is back to LOW_SPEED_PLANNING after 0.5s in high speed.");
+                 setRobotState(LOW_SPEED_PLANNING);
+
+                 normal_to_low_active = false;
+             }
+         }else {
+             normal_to_low_active = false;
+         }
+     }else if (getRobotState() == LOW_SPEED_PLANNING) {
+
+         normal_to_low_active = false;
+
+         if (linear_speed >= LOW_SPEED_THRESHOLD + LOW_SPEED_HYSTERESIS) {
+             if (!low_to_normal_active) {
+                  low_to_normal_time = ros::Time::now();
+                 low_to_normal_active = true;
+             } else if ((ros::Time::now() -  low_to_normal_time).toSec() >= 0.5) {
+                 ROS_INFO("The robot is back to NORMAL_PLANNING after 0.5s in low speed.");
+                 setRobotState(NORMAL_PLANNING);
+                 low_to_normal_active = false;
+             }
+         } else {
+             low_to_normal_active = false;
+         }
+
+         if (linear_speed < MIN_SPEED) {
+             if (!low_to_brake_active) {
+                 low_to_brake_time = ros::Time::now();
+                 low_to_brake_active = true;
+             } else if ((ros::Time::now() - low_to_brake_time).toSec() > BRAKE_WAIT_TIME * STOPPED_TIME_THRESHOLD) {
+                 ROS_INFO("The robot needs to brake after 1 second in low speed");
+                 setRobotState(BRAKE_PLANNING);
+                 low_to_brake_active = false;
+             }
+         } else {
+             low_to_brake_active = false;
+         }
+
+     } else {  // recover
+         normal_to_low_active = false;
+         low_to_normal_active = false;
+         low_to_brake_active = false;
+
+         if (re >= 5)
+             re = 4;
+     }
 }
 
 void Robot_config::publishRobotStateString() const {

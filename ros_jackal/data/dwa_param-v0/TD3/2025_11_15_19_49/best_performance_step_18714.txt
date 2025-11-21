@@ -1,5 +1,0 @@
-Best Performance at TensorBoard Step 18714:
-Training Step: 19765
-Episode Reward: 26.245
-Episode Length: 31.053
-Success Rate: 0.000%
